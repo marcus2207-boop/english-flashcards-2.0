@@ -1,0 +1,230 @@
+{
+  "name": "Modal",
+  "description": "Overlay dialog for import preview, session summary, and confirmations",
+  "category": "organisms",
+  "relatedStories": ["ST-003", "ST-007"],
+  "props": {
+    "isOpen": {
+      "type": "boolean",
+      "required": true,
+      "description": "Controls modal visibility"
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "description": "Modal title displayed in header"
+    },
+    "size": {
+      "type": "enum",
+      "required": false,
+      "default": "medium",
+      "options": ["small", "medium", "large", "fullscreen"],
+      "description": "Modal size variant"
+    },
+    "closeOnEscape": {
+      "type": "boolean",
+      "required": false,
+      "default": true,
+      "description": "Whether Esc key closes modal"
+    },
+    "closeOnOverlayClick": {
+      "type": "boolean",
+      "required": false,
+      "default": true,
+      "description": "Whether clicking overlay closes modal"
+    },
+    "showCloseButton": {
+      "type": "boolean",
+      "required": false,
+      "default": true,
+      "description": "Whether to show X close button in header"
+    },
+    "footer": {
+      "type": "node",
+      "required": false,
+      "description": "Footer content (typically action buttons)"
+    },
+    "onClose": {
+      "type": "function",
+      "required": true,
+      "description": "Callback when modal is closed"
+    }
+  },
+  "states": {
+    "closed": {
+      "description": "Modal is not visible",
+      "visualChanges": "Display none, removed from DOM or hidden",
+      "ariaAttributes": {
+        "aria-hidden": "true"
+      }
+    },
+    "opening": {
+      "description": "Modal is animating in",
+      "visualChanges": "Fade in overlay, scale/fade in dialog",
+      "duration": "320ms",
+      "ariaAttributes": {
+        "aria-hidden": "false"
+      }
+    },
+    "open": {
+      "description": "Modal is fully visible and interactive",
+      "visualChanges": "Fully opaque, focus trapped inside",
+      "ariaAttributes": {
+        "role": "dialog",
+        "aria-modal": "true",
+        "aria-labelledby": "modal-title"
+      }
+    },
+    "closing": {
+      "description": "Modal is animating out",
+      "visualChanges": "Fade out overlay, scale/fade out dialog",
+      "duration": "220ms"
+    }
+  },
+  "sizes": {
+    "small": {
+      "maxWidth": "480px",
+      "usage": "Confirmations, simple forms"
+    },
+    "medium": {
+      "maxWidth": "720px",
+      "usage": "Session summary, moderate content"
+    },
+    "large": {
+      "maxWidth": "1000px",
+      "usage": "Import preview with table"
+    },
+    "fullscreen": {
+      "maxWidth": "100vw",
+      "height": "100vh",
+      "usage": "Mobile import preview"
+    }
+  },
+  "accessibility": {
+    "role": "dialog",
+    "keyboardInteractions": {
+      "Escape": "Close modal (if closeOnEscape=true)",
+      "Tab": "Navigate to next focusable element within modal",
+      "Shift+Tab": "Navigate to previous focusable element within modal"
+    },
+    "ariaLabels": [
+      "aria-modal=\"true\"",
+      "aria-labelledby: References title element",
+      "aria-describedby: Optional, references description"
+    ],
+    "focusManagement": {
+      "onOpen": "Focus moves to first focusable element (typically close button or primary action)",
+      "focusTrap": "Tab navigation is trapped within modal. Cannot tab to page content behind modal.",
+      "onClose": "Focus returns to element that opened the modal"
+    },
+    "overlayBehavior": {
+      "inertBackground": "Page content behind modal is inert (aria-hidden, pointer-events-none)",
+      "scrollLock": "Body scroll is locked when modal is open"
+    }
+  },
+  "tokens": {
+    "colors": ["color-surface", "color-neutral-900", "color-neutral-200", "color-focus"],
+    "spacing": ["spacing-md", "spacing-lg", "spacing-xl"],
+    "borderRadius": ["radius-lg"],
+    "shadow": ["shadow-lg"],
+    "motion": ["duration-medium", "easing-standard"]
+  },
+  "examples": [
+    {
+      "name": "Import Preview Modal",
+      "props": {
+        "title": "Import Preview",
+        "size": "large",
+        "closeOnOverlayClick": false
+      },
+      "description": "Large modal showing import validation table with inline editing",
+      "context": "ST-003",
+      "content": "Table with validation results, inline edit controls, transaction warning"
+    },
+    {
+      "name": "Session Summary Modal",
+      "props": {
+        "title": "Sesja zakończona!",
+        "size": "medium",
+        "closeOnEscape": false
+      },
+      "description": "Modal showing session completion stats",
+      "context": "ST-007",
+      "content": "Mastered count, accuracy, options to repeat mistakes or return to dashboard"
+    },
+    {
+      "name": "Confirmation Dialog",
+      "props": {
+        "title": "Potwierdź akcję",
+        "size": "small",
+        "showCloseButton": false
+      },
+      "description": "Simple confirmation for destructive actions",
+      "content": "Message and Confirm/Cancel buttons"
+    }
+  ],
+  "importPreviewModalSpec": {
+    "description": "Detailed specification for import preview modal (ST-003)",
+    "layout": {
+      "header": {
+        "title": "Import Preview",
+        "subtitle": "{{acceptedCount}} zaakceptowanych, {{rejectedCount}} odrzuconych"
+      },
+      "body": {
+        "table": {
+          "columns": ["Row #", "English", "Polish", "Tags", "Status"],
+          "editable": true,
+          "pagination": {
+            "rowsPerPage": 20,
+            "showTotal": true
+          },
+          "filters": {
+            "showErrorsOnly": true,
+            "showWarningsOnly": false
+          }
+        },
+        "transactionalWarning": {
+          "condition": "rejectedCount / totalRows > 0.5",
+          "message": "Uwaga: Więcej niż 50% wierszy zawiera błędy. Import zostanie wycofany (transactional rollback).",
+          "action": "Disable Commit button, require admin to fix errors or force-commit with secondary confirmation"
+        }
+      },
+      "footer": {
+        "actions": [
+          {
+            "label": "Anuluj",
+            "variant": "secondary",
+            "action": "Close modal without importing"
+          },
+          {
+            "label": "Napraw błędy automatycznie",
+            "variant": "secondary",
+            "action": "Auto-fix simple errors (e.g., missing Polish → empty placeholder)",
+            "requiresConfirmation": true
+          },
+          {
+            "label": "Zatwierdź Import",
+            "variant": "primary",
+            "action": "Commit import transaction",
+            "disabled": "transactionalRollback && !forceCommit"
+          }
+        ]
+      }
+    },
+    "inlineEditing": {
+      "trigger": "Click on cell or Tab to cell and press Enter",
+      "controls": "Input field with Save/Cancel buttons",
+      "keyboard": {
+        "Enter": "Save edit",
+        "Escape": "Cancel edit",
+        "Tab": "Save and move to next cell"
+      },
+      "validation": "Real-time validation on save"
+    }
+  },
+  "implementation": {
+    "html": "<div class=\"modal-overlay\" \n     aria-hidden=\"{!isOpen}\"\n     onclick=\"{handleOverlayClick}\">\n  \n  <div class=\"modal modal--{size}\" \n       role=\"dialog\" \n       aria-modal=\"true\"\n       aria-labelledby=\"modal-title\">\n    \n    <div class=\"modal__header\">\n      <h2 id=\"modal-title\" class=\"modal__title\">{title}</h2>\n      {showCloseButton && (\n        <button class=\"modal__close\" \n                aria-label=\"Close modal\"\n                onclick=\"{onClose}\">\n          <CloseIcon />\n        </button>\n      )}\n    </div>\n    \n    <div class=\"modal__body\">\n      {children}\n    </div>\n    \n    {footer && (\n      <div class=\"modal__footer\">\n        {footer}\n      </div>\n    )}\n  </div>\n</div>",
+    "css": ".modal-overlay {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background-color: rgba(15, 23, 42, 0.5);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  z-index: 1000;\n  opacity: 0;\n  transition: opacity var(--duration-medium) var(--easing-standard);\n}\n\n.modal-overlay[aria-hidden=\"false\"] {\n  opacity: 1;\n}\n\n.modal {\n  background-color: var(--color-surface);\n  border-radius: var(--radius-lg);\n  box-shadow: var(--shadow-lg);\n  display: flex;\n  flex-direction: column;\n  max-height: 90vh;\n  transform: scale(0.95);\n  transition: transform var(--duration-medium) var(--easing-standard);\n}\n\n.modal-overlay[aria-hidden=\"false\"] .modal {\n  transform: scale(1);\n}\n\n.modal--small {\n  width: 90%;\n  max-width: 480px;\n}\n\n.modal--medium {\n  width: 90%;\n  max-width: 720px;\n}\n\n.modal--large {\n  width: 95%;\n  max-width: 1000px;\n}\n\n.modal--fullscreen {\n  width: 100vw;\n  height: 100vh;\n  max-height: 100vh;\n  border-radius: 0;\n}\n\n.modal__header {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: var(--spacing-lg);\n  border-bottom: 1px solid var(--color-neutral-200);\n}\n\n.modal__title {\n  font-size: var(--fontSize-h2);\n  font-weight: var(--font-weight-semibold);\n  color: var(--color-neutral-900);\n  margin: 0;\n}\n\n.modal__close {\n  background: none;\n  border: none;\n  cursor: pointer;\n  padding: var(--spacing-xs);\n  color: var(--color-neutral-700);\n}\n\n.modal__close:hover {\n  color: var(--color-neutral-900);\n}\n\n.modal__close:focus-visible {\n  outline: var(--focus-ring-width) solid var(--color-focus);\n  outline-offset: var(--focus-ring-offset);\n  border-radius: var(--radius-sm);\n}\n\n.modal__body {\n  padding: var(--spacing-lg);\n  overflow-y: auto;\n  flex: 1;\n}\n\n.modal__footer {\n  display: flex;\n  justify-content: flex-end;\n  gap: var(--spacing-md);\n  padding: var(--spacing-lg);\n  border-top: 1px solid var(--color-neutral-200);\n}\n\n/* Lock body scroll when modal is open */\nbody.modal-open {\n  overflow: hidden;\n}\n\n@media (prefers-reduced-motion: reduce) {\n  .modal-overlay,\n  .modal {\n    transition: none;\n  }\n}\n\n@media (max-width: 768px) {\n  .modal--large,\n  .modal--medium {\n    width: 100vw;\n    height: 100vh;\n    max-height: 100vh;\n    border-radius: 0;\n  }\n}",
+    "javascript": "class Modal {\n  constructor(props) {\n    this.props = props;\n    this.previousActiveElement = null;\n    this.focusableElements = [];\n  }\n\n  open() {\n    this.previousActiveElement = document.activeElement;\n    document.body.classList.add('modal-open');\n    document.body.setAttribute('aria-hidden', 'true');\n    \n    // Get all focusable elements within modal\n    this.focusableElements = this.getfocusableElements();\n    \n    // Focus first focusable element\n    if (this.focusableElements.length > 0) {\n      this.focusableElements[0].focus();\n    }\n    \n    // Set up event listeners\n    document.addEventListener('keydown', this.handleKeyDown);\n  }\n\n  close() {\n    document.body.classList.remove('modal-open');\n    document.body.removeAttribute('aria-hidden');\n    \n    // Return focus to previous element\n    if (this.previousActiveElement) {\n      this.previousActiveElement.focus();\n    }\n    \n    // Remove event listeners\n    document.removeEventListener('keydown', this.handleKeyDown);\n    \n    this.props.onClose();\n  }\n\n  handleKeyDown = (e) => {\n    if (e.key === 'Escape' && this.props.closeOnEscape) {\n      this.close();\n    }\n    \n    if (e.key === 'Tab') {\n      this.trapFocus(e);\n    }\n  }\n\n  trapFocus(e) {\n    const firstElement = this.focusableElements[0];\n    const lastElement = this.focusableElements[this.focusableElements.length - 1];\n    \n    if (e.shiftKey) {\n      if (document.activeElement === firstElement) {\n        e.preventDefault();\n        lastElement.focus();\n      }\n    } else {\n      if (document.activeElement === lastElement) {\n        e.preventDefault();\n        firstElement.focus();\n      }\n    }\n  }\n\n  getFocusableElements() {\n    const selector = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex=\"-1\"])';\n    return Array.from(this.modalElement.querySelectorAll(selector));\n  }\n}"
+  }
+}

@@ -1,0 +1,319 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format.json",
+  "name": "English Flashcards 2.0 Design System",
+  "version": "1.0.0",
+  "description": "Design tokens for the English Flashcards MVP application",
+  "colors": {
+    "primary": {
+      "value": "#4F46E5",
+      "type": "color",
+      "description": "Primary brand color - Indigo 600, used for CTAs and primary actions"
+    },
+    "primary-500": {
+      "value": "#6366F1",
+      "type": "color",
+      "description": "Primary hover state - Indigo 500"
+    },
+    "primary-700": {
+      "value": "#4338CA",
+      "type": "color",
+      "description": "Primary active state - Indigo 700"
+    },
+    "success": {
+      "value": "#16A34A",
+      "type": "color",
+      "description": "Success state - Green 600"
+    },
+    "warning": {
+      "value": "#F59E0B",
+      "type": "color",
+      "description": "Warning state - Amber 500"
+    },
+    "error": {
+      "value": "#DC2626",
+      "type": "color",
+      "description": "Error state - Red 600"
+    },
+    "neutral": {
+      "900": {
+        "value": "#0F172A",
+        "type": "color",
+        "description": "Primary text color"
+      },
+      "700": {
+        "value": "#374151",
+        "type": "color",
+        "description": "Secondary text color"
+      },
+      "400": {
+        "value": "#9CA3AF",
+        "type": "color",
+        "description": "Border and disabled state"
+      },
+      "200": {
+        "value": "#E5E7EB",
+        "type": "color",
+        "description": "Background panels"
+      }
+    },
+    "surface": {
+      "value": "#FFFFFF",
+      "type": "color",
+      "description": "Main background color"
+    },
+    "background": {
+      "value": "#F8FAFC",
+      "type": "color",
+      "description": "Secondary background color"
+    },
+    "focus": {
+      "value": "#A78BFA",
+      "type": "color",
+      "description": "Focus ring color - Indigo 300"
+    },
+    "phonetic-hint-bg": {
+      "value": "#F3F4F6",
+      "type": "color",
+      "description": "Background for phonetic hint chips"
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "base": {
+        "value": "'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+        "type": "fontFamily",
+        "description": "Primary UI font with system fallbacks"
+      }
+    },
+    "fontSize": {
+      "base": {
+        "value": "16px",
+        "type": "dimension",
+        "description": "Base font size for body text"
+      },
+      "h1": {
+        "value": "28px",
+        "type": "dimension",
+        "description": "Heading 1 size"
+      },
+      "h2": {
+        "value": "22px",
+        "type": "dimension",
+        "description": "Heading 2 size"
+      },
+      "caption": {
+        "value": "13px",
+        "type": "dimension",
+        "description": "Caption and small text"
+      },
+      "cta-large": {
+        "value": "18px",
+        "type": "dimension",
+        "description": "Large CTA button text"
+      }
+    },
+    "fontWeight": {
+      "regular": {
+        "value": "400",
+        "type": "number",
+        "description": "Regular text weight"
+      },
+      "medium": {
+        "value": "500",
+        "type": "number",
+        "description": "Medium text weight"
+      },
+      "semibold": {
+        "value": "600",
+        "type": "number",
+        "description": "Semibold for headings and CTAs"
+      },
+      "bold": {
+        "value": "700",
+        "type": "number",
+        "description": "Bold for emphasis"
+      }
+    },
+    "lineHeight": {
+      "base": {
+        "value": "1.5",
+        "type": "number",
+        "description": "Base line height"
+      },
+      "h1": {
+        "value": "1.2",
+        "type": "number",
+        "description": "Heading 1 line height"
+      },
+      "h2": {
+        "value": "1.25",
+        "type": "number",
+        "description": "Heading 2 line height"
+      }
+    }
+  },
+  "spacing": {
+    "xxs": {
+      "value": "4px",
+      "type": "dimension",
+      "description": "Extra extra small spacing"
+    },
+    "xs": {
+      "value": "8px",
+      "type": "dimension",
+      "description": "Extra small spacing - baseline unit"
+    },
+    "sm": {
+      "value": "12px",
+      "type": "dimension",
+      "description": "Small spacing"
+    },
+    "md": {
+      "value": "16px",
+      "type": "dimension",
+      "description": "Medium spacing - gutter default"
+    },
+    "lg": {
+      "value": "24px",
+      "type": "dimension",
+      "description": "Large spacing"
+    },
+    "xl": {
+      "value": "32px",
+      "type": "dimension",
+      "description": "Extra large spacing"
+    },
+    "xxl": {
+      "value": "48px",
+      "type": "dimension",
+      "description": "Extra extra large spacing"
+    }
+  },
+  "borderRadius": {
+    "sm": {
+      "value": "6px",
+      "type": "dimension",
+      "description": "Small border radius for buttons and inputs"
+    },
+    "md": {
+      "value": "10px",
+      "type": "dimension",
+      "description": "Medium border radius for cards"
+    },
+    "lg": {
+      "value": "14px",
+      "type": "dimension",
+      "description": "Large border radius for flashcards"
+    },
+    "full": {
+      "value": "9999px",
+      "type": "dimension",
+      "description": "Full border radius for circular elements"
+    }
+  },
+  "shadow": {
+    "sm": {
+      "value": "0 1px 2px rgba(15, 23, 42, 0.04)",
+      "type": "shadow",
+      "description": "Small shadow for subtle elevation"
+    },
+    "md": {
+      "value": "0 4px 12px rgba(15, 23, 42, 0.08)",
+      "type": "shadow",
+      "description": "Medium shadow for cards"
+    },
+    "lg": {
+      "value": "0 10px 24px rgba(15, 23, 42, 0.12)",
+      "type": "shadow",
+      "description": "Large shadow for modals"
+    }
+  },
+  "layout": {
+    "grid": {
+      "columns": {
+        "desktop": {
+          "value": "12",
+          "type": "number",
+          "description": "Desktop grid columns"
+        },
+        "tablet": {
+          "value": "8",
+          "type": "number",
+          "description": "Tablet grid columns"
+        },
+        "mobile": {
+          "value": "4",
+          "type": "number",
+          "description": "Mobile grid columns"
+        }
+      },
+      "gutter": {
+        "value": "16px",
+        "type": "dimension",
+        "description": "Grid gutter spacing"
+      }
+    },
+    "container": {
+      "maxWidth": {
+        "value": "1200px",
+        "type": "dimension",
+        "description": "Maximum container width"
+      }
+    },
+    "breakpoints": {
+      "mobile": {
+        "value": "420px",
+        "type": "dimension",
+        "description": "Mobile breakpoint"
+      },
+      "tablet": {
+        "value": "768px",
+        "type": "dimension",
+        "description": "Tablet breakpoint"
+      },
+      "desktop": {
+        "value": "1024px",
+        "type": "dimension",
+        "description": "Desktop breakpoint"
+      }
+    }
+  },
+  "motion": {
+    "duration": {
+      "micro": {
+        "value": "120ms",
+        "type": "duration",
+        "description": "Micro interactions like button states"
+      },
+      "short": {
+        "value": "220ms",
+        "type": "duration",
+        "description": "Short transitions"
+      },
+      "medium": {
+        "value": "320ms",
+        "type": "duration",
+        "description": "Medium transitions like modals"
+      }
+    },
+    "easing": {
+      "standard": {
+        "value": "cubic-bezier(0.2, 0.8, 0.2, 1)",
+        "type": "cubicBezier",
+        "description": "Standard easing function"
+      }
+    }
+  },
+  "focusRing": {
+    "width": {
+      "value": "2px",
+      "type": "dimension",
+      "description": "Focus ring width"
+    },
+    "offset": {
+      "value": "2px",
+      "type": "dimension",
+      "description": "Focus ring offset from element"
+    }
+  }
+}

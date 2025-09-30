@@ -1,0 +1,223 @@
+{
+  "name": "Button",
+  "description": "Primary interactive button component with multiple variants and states",
+  "category": "atoms",
+  "relatedStories": ["ST-001", "ST-008", "ST-003", "ST-009"],
+  "props": {
+    "variant": {
+      "type": "enum",
+      "required": false,
+      "default": "primary",
+      "options": ["primary", "secondary", "ghost"],
+      "description": "Visual variant of the button"
+    },
+    "size": {
+      "type": "enum",
+      "required": false,
+      "default": "medium",
+      "options": ["small", "medium", "large"],
+      "description": "Size of the button"
+    },
+    "disabled": {
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "description": "Whether the button is disabled"
+    },
+    "loading": {
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "description": "Whether the button is in loading state"
+    },
+    "fullWidth": {
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "description": "Whether the button should take full width of container"
+    },
+    "type": {
+      "type": "enum",
+      "required": false,
+      "default": "button",
+      "options": ["button", "submit", "reset"],
+      "description": "HTML button type attribute"
+    },
+    "ariaLabel": {
+      "type": "string",
+      "required": false,
+      "description": "Accessible label for screen readers"
+    },
+    "onClick": {
+      "type": "function",
+      "required": false,
+      "description": "Click event handler"
+    }
+  },
+  "states": {
+    "default": {
+      "description": "Initial resting state",
+      "visualChanges": "Base colors applied, no interaction",
+      "ariaAttributes": {}
+    },
+    "hover": {
+      "description": "Mouse cursor over button (desktop)",
+      "visualChanges": "Background lightens to primary-500 for primary variant",
+      "ariaAttributes": {}
+    },
+    "focus": {
+      "description": "Keyboard focus on button",
+      "visualChanges": "2px outline with focus ring color, outline-offset 2px",
+      "ariaAttributes": {
+        "aria-focused": "true"
+      }
+    },
+    "active": {
+      "description": "Button being clicked/pressed",
+      "visualChanges": "Background darkens to primary-700 for primary variant",
+      "ariaAttributes": {}
+    },
+    "disabled": {
+      "description": "Button cannot be interacted with",
+      "visualChanges": "Opacity 0.5, cursor not-allowed",
+      "ariaAttributes": {
+        "aria-disabled": "true"
+      }
+    },
+    "loading": {
+      "description": "Async operation in progress",
+      "visualChanges": "Spinner icon displayed, content dimmed",
+      "ariaAttributes": {
+        "aria-busy": "true",
+        "aria-label": "Loading..."
+      }
+    }
+  },
+  "variants": {
+    "primary": {
+      "description": "High emphasis call-to-action",
+      "tokens": {
+        "backgroundColor": "color-primary",
+        "backgroundColorHover": "color-primary-500",
+        "backgroundColorActive": "color-primary-700",
+        "textColor": "color-surface",
+        "borderRadius": "radius-md",
+        "padding": "spacing-sm spacing-lg",
+        "fontWeight": "font-weight-semibold"
+      },
+      "usage": {
+        "dos": ["Use for primary actions", "Limit to one per screen section", "Use clear, action-oriented labels"],
+        "donts": ["Don't use multiple primary buttons in close proximity", "Don't use for destructive actions"]
+      }
+    },
+    "secondary": {
+      "description": "Medium emphasis alternative action",
+      "tokens": {
+        "backgroundColor": "transparent",
+        "border": "1px solid color-neutral-400",
+        "textColor": "color-neutral-900",
+        "borderRadius": "radius-md",
+        "padding": "spacing-sm spacing-lg"
+      },
+      "usage": {
+        "dos": ["Use for secondary actions", "Pair with primary button", "Use for cancel actions"],
+        "donts": ["Don't use as only CTA", "Don't mix with ghost variant in same context"]
+      }
+    },
+    "ghost": {
+      "description": "Low emphasis tertiary action",
+      "tokens": {
+        "backgroundColor": "transparent",
+        "textColor": "color-primary",
+        "padding": "spacing-sm spacing-md"
+      },
+      "usage": {
+        "dos": ["Use for tertiary actions", "Use for navigation links", "Use in dense UI areas"],
+        "donts": ["Don't use for critical actions", "Don't use as primary CTA"]
+      }
+    }
+  },
+  "sizes": {
+    "small": {
+      "padding": "spacing-xs spacing-md",
+      "fontSize": "fontSize-caption",
+      "height": "32px"
+    },
+    "medium": {
+      "padding": "spacing-sm spacing-lg",
+      "fontSize": "fontSize-base",
+      "height": "40px"
+    },
+    "large": {
+      "padding": "spacing-md spacing-xl",
+      "fontSize": "fontSize-cta-large",
+      "height": "48px"
+    }
+  },
+  "accessibility": {
+    "role": "button",
+    "keyboardInteractions": {
+      "Enter": "Activates button",
+      "Space": "Activates button"
+    },
+    "ariaLabels": [
+      "aria-label (required if no visible text)",
+      "aria-disabled (when disabled)",
+      "aria-busy (when loading)"
+    ],
+    "focusManagement": "Button receives focus via Tab key. Focus indicator must be visible with 2px outline using focus ring color.",
+    "screenReaderAnnouncements": {
+      "loading": "Button label, loading",
+      "disabled": "Button label, disabled"
+    }
+  },
+  "tokens": {
+    "colors": ["color-primary", "color-primary-500", "color-primary-700", "color-surface", "color-neutral-900", "color-neutral-400", "color-focus"],
+    "spacing": ["spacing-xs", "spacing-sm", "spacing-md", "spacing-lg", "spacing-xl"],
+    "typography": ["fontSize-base", "fontSize-caption", "fontSize-cta-large", "fontWeight-semibold"],
+    "borderRadius": ["radius-md"],
+    "motion": ["duration-micro", "easing-standard"]
+  },
+  "examples": [
+    {
+      "name": "Primary CTA",
+      "props": {
+        "variant": "primary",
+        "size": "large"
+      },
+      "description": "Start 15-min session button on student dashboard",
+      "context": "ST-008"
+    },
+    {
+      "name": "Secondary Action",
+      "props": {
+        "variant": "secondary",
+        "size": "medium"
+      },
+      "description": "Cancel button in import preview modal",
+      "context": "ST-003"
+    },
+    {
+      "name": "Loading State",
+      "props": {
+        "variant": "primary",
+        "loading": true
+      },
+      "description": "Submit button while login request is processing",
+      "context": "ST-001"
+    },
+    {
+      "name": "Disabled State",
+      "props": {
+        "variant": "primary",
+        "disabled": true
+      },
+      "description": "Commit import button when validation has errors",
+      "context": "ST-003"
+    }
+  ],
+  "implementation": {
+    "html": "<button class=\"btn btn--{variant} btn--{size}\" type=\"{type}\" aria-label=\"{ariaLabel}\" {disabled} {aria-busy}>\n  {loading ? <Spinner /> : null}\n  {children}\n</button>",
+    "css": ".btn {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  gap: var(--spacing-xs);\n  font-family: var(--font-family-base);\n  font-weight: var(--font-weight-semibold);\n  border: none;\n  cursor: pointer;\n  transition: all var(--duration-micro) var(--easing-standard);\n  user-select: none;\n}\n\n.btn:focus-visible {\n  outline: var(--focus-ring-width) solid var(--color-focus);\n  outline-offset: var(--focus-ring-offset);\n}\n\n.btn--primary {\n  background-color: var(--color-primary);\n  color: var(--color-surface);\n  border-radius: var(--radius-md);\n}\n\n.btn--primary:hover:not(:disabled) {\n  background-color: var(--color-primary-500);\n}\n\n.btn--primary:active:not(:disabled) {\n  background-color: var(--color-primary-700);\n}\n\n.btn:disabled {\n  opacity: 0.5;\n  cursor: not-allowed;\n}\n\n@media (prefers-reduced-motion: reduce) {\n  .btn {\n    transition: none;\n  }\n}"
+  }
+}

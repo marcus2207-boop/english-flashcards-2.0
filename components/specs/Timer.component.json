@@ -1,0 +1,162 @@
+{
+  "name": "Timer",
+  "description": "Session countdown timer with progress bar and time remaining display",
+  "category": "molecules",
+  "relatedStories": ["ST-007"],
+  "props": {
+    "duration": {
+      "type": "number",
+      "required": false,
+      "default": 900,
+      "description": "Duration in seconds (default 15 min = 900s)"
+    },
+    "autoStart": {
+      "type": "boolean",
+      "required": false,
+      "default": true,
+      "description": "Whether timer starts automatically"
+    },
+    "showProgress": {
+      "type": "boolean",
+      "required": false,
+      "default": true,
+      "description": "Whether to show visual progress bar"
+    },
+    "warningThreshold": {
+      "type": "number",
+      "required": false,
+      "default": 60,
+      "description": "Seconds at which to show warning state"
+    },
+    "onComplete": {
+      "type": "function",
+      "required": false,
+      "description": "Callback when timer reaches zero"
+    },
+    "onWarning": {
+      "type": "function",
+      "required": false,
+      "description": "Callback when warning threshold is reached"
+    }
+  },
+  "states": {
+    "idle": {
+      "description": "Timer initialized but not started",
+      "visualChanges": "Display full duration, progress bar at 100%",
+      "ariaAttributes": {
+        "aria-label": "Timer: {duration} minutes"
+      }
+    },
+    "running": {
+      "description": "Timer actively counting down",
+      "visualChanges": "Time decreasing, progress bar animating left-to-right",
+      "ariaAttributes": {
+        "aria-label": "Time remaining: {minutes}:{seconds}",
+        "aria-live": "polite"
+      }
+    },
+    "paused": {
+      "description": "Timer paused by user",
+      "visualChanges": "Time frozen, progress bar animation paused, pause icon shown",
+      "ariaAttributes": {
+        "aria-label": "Timer paused at {minutes}:{seconds}"
+      }
+    },
+    "warning": {
+      "description": "Less than warning threshold remaining",
+      "visualChanges": "Progress bar turns amber, subtle pulse animation, time text turns warning color",
+      "ariaAttributes": {
+        "role": "alert",
+        "aria-label": "Warning: {seconds} seconds remaining"
+      }
+    },
+    "complete": {
+      "description": "Timer reached zero",
+      "visualChanges": "Time shows 0:00, progress bar at 0%, completion indicator",
+      "ariaAttributes": {
+        "role": "alert",
+        "aria-label": "Time's up!"
+      }
+    }
+  },
+  "behavior": {
+    "countdown": {
+      "updateInterval": "1 second",
+      "format": "MM:SS (e.g., 15:00)",
+      "announcements": {
+        "everyMinute": "Announce full minute marks to screen readers",
+        "finalCountdown": "Announce every second for last 10 seconds"
+      }
+    },
+    "progressBar": {
+      "direction": "right-to-left (depletes as time passes)",
+      "animation": "Linear, respects prefers-reduced-motion",
+      "colorTransitions": {
+        "normal": "color-primary",
+        "warning": "color-warning (below threshold)"
+      }
+    },
+    "pauseResume": {
+      "pauseButton": "Pause icon button next to timer",
+      "keyboard": "Space bar (when timer focused)",
+      "behavior": "Animation pauses, time frozen, can resume"
+    }
+  },
+  "accessibility": {
+    "role": "timer",
+    "keyboardInteractions": {
+      "Space": "Pause/resume timer when focused"
+    },
+    "ariaLabels": [
+      "role=\"timer\"",
+      "aria-live=\"polite\" (announces updates)",
+      "aria-atomic=\"true\" (announce whole message)"
+    ],
+    "screenReaderAnnouncements": {
+      "start": "Timer started: {duration} minutes",
+      "everyMinute": "{minutes} minutes remaining",
+      "warning": "Warning: Less than 1 minute remaining",
+      "finalCountdown": "10, 9, 8... seconds",
+      "complete": "Time's up!"
+    },
+    "visualAlternatives": {
+      "progressBar": "Visual representation for deaf users",
+      "colorChange": "Combined with icon change (not color-only)",
+      "pulse": "Optional, can be disabled with reduced motion"
+    }
+  },
+  "tokens": {
+    "colors": ["color-primary", "color-warning", "color-neutral-900", "color-neutral-200"],
+    "spacing": ["spacing-xs", "spacing-sm", "spacing-md"],
+    "typography": ["fontSize-h2", "fontWeight-bold"],
+    "motion": ["duration-micro", "easing-standard"]
+  },
+  "examples": [
+    {
+      "name": "Session Timer",
+      "props": {
+        "duration": 900,
+        "autoStart": true,
+        "showProgress": true,
+        "warningThreshold": 60
+      },
+      "description": "15-minute session timer in session UI",
+      "context": "ST-007"
+    },
+    {
+      "name": "Short Practice Timer",
+      "props": {
+        "duration": 300,
+        "autoStart": false,
+        "warningThreshold": 30
+      },
+      "description": "5-minute practice session",
+      "context": "Custom session duration"
+    }
+  ],
+  "implementation": {
+    "html": "<div class=\"timer\" role=\"timer\" aria-label=\"{timerLabel}\">\n  <div class=\"timer__display\">\n    <span class=\"timer__time\" aria-live=\"polite\" aria-atomic=\"true\">\n      {formatTime(timeRemaining)}\n    </span>\n    <button class=\"timer__control\" \n            aria-label=\"{isPaused ? 'Resume' : 'Pause'}\"\n            onclick=\"{togglePause}\">\n      {isPaused ? <PlayIcon /> : <PauseIcon />}\n    </button>\n  </div>\n  \n  {showProgress && (\n    <div class=\"timer__progress\" aria-hidden=\"true\">\n      <div class=\"timer__progress-bar\" \n           style=\"width: {progressPercentage}%\"\n           class=\"{isWarning ? 'timer__progress-bar--warning' : ''}\">\n      </div>\n    </div>\n  )}\n</div>",
+    "css": ".timer {\n  display: flex;\n  flex-direction: column;\n  gap: var(--spacing-sm);\n}\n\n.timer__display {\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-md);\n}\n\n.timer__time {\n  font-size: var(--fontSize-h2);\n  font-weight: var(--font-weight-bold);\n  color: var(--color-neutral-900);\n  font-variant-numeric: tabular-nums;\n  min-width: 5ch;\n}\n\n.timer__time--warning {\n  color: var(--color-warning);\n}\n\n.timer__control {\n  background: none;\n  border: none;\n  cursor: pointer;\n  padding: var(--spacing-xs);\n  color: var(--color-neutral-700);\n}\n\n.timer__control:hover {\n  color: var(--color-primary);\n}\n\n.timer__control:focus-visible {\n  outline: var(--focus-ring-width) solid var(--color-focus);\n  outline-offset: var(--focus-ring-offset);\n  border-radius: var(--radius-sm);\n}\n\n.timer__progress {\n  width: 100%;\n  height: 8px;\n  background-color: var(--color-neutral-200);\n  border-radius: 4px;\n  overflow: hidden;\n}\n\n.timer__progress-bar {\n  height: 100%;\n  background-color: var(--color-primary);\n  transition: width 1s linear;\n}\n\n.timer__progress-bar--warning {\n  background-color: var(--color-warning);\n  animation: pulse 2s ease-in-out infinite;\n}\n\n@keyframes pulse {\n  0%, 100% { opacity: 1; }\n  50% { opacity: 0.7; }\n}\n\n@media (prefers-reduced-motion: reduce) {\n  .timer__progress-bar {\n    transition: none;\n  }\n  \n  .timer__progress-bar--warning {\n    animation: none;\n  }\n}",
+    "javascript": "class Timer {\n  constructor(props) {\n    this.props = props;\n    this.timeRemaining = props.duration;\n    this.intervalId = null;\n    this.isPaused = false;\n    this.hasWarned = false;\n  }\n\n  start() {\n    if (this.intervalId) return;\n    \n    this.intervalId = setInterval(() => {\n      if (!this.isPaused) {\n        this.tick();\n      }\n    }, 1000);\n    \n    this.announceToScreenReader(`Timer started: ${this.formatMinutes(this.props.duration)}`);\n  }\n\n  tick() {\n    this.timeRemaining--;\n    \n    // Announce every minute\n    if (this.timeRemaining % 60 === 0 && this.timeRemaining > 0) {\n      this.announceToScreenReader(`${this.formatMinutes(this.timeRemaining)} remaining`);\n    }\n    \n    // Warning threshold\n    if (this.timeRemaining === this.props.warningThreshold && !this.hasWarned) {\n      this.hasWarned = true;\n      this.announceToScreenReader(`Warning: Less than ${this.props.warningThreshold} seconds remaining`);\n      if (this.props.onWarning) {\n        this.props.onWarning();\n      }\n    }\n    \n    // Final countdown (last 10 seconds)\n    if (this.timeRemaining <= 10 && this.timeRemaining > 0) {\n      this.announceToScreenReader(`${this.timeRemaining}`);\n    }\n    \n    // Complete\n    if (this.timeRemaining <= 0) {\n      this.stop();\n      this.announceToScreenReader('Time\\'s up!');\n      if (this.props.onComplete) {\n        this.props.onComplete();\n      }\n    }\n  }\n\n  pause() {\n    this.isPaused = true;\n    this.announceToScreenReader('Timer paused');\n  }\n\n  resume() {\n    this.isPaused = false;\n    this.announceToScreenReader('Timer resumed');\n  }\n\n  togglePause() {\n    if (this.isPaused) {\n      this.resume();\n    } else {\n      this.pause();\n    }\n  }\n\n  stop() {\n    if (this.intervalId) {\n      clearInterval(this.intervalId);\n      this.intervalId = null;\n    }\n  }\n\n  formatTime(seconds) {\n    const mins = Math.floor(seconds / 60);\n    const secs = seconds % 60;\n    return `${mins}:${secs.toString().padStart(2, '0')}`;\n  }\n\n  formatMinutes(seconds) {\n    const mins = Math.floor(seconds / 60);\n    return mins === 1 ? '1 minute' : `${mins} minutes`;\n  }\n\n  getProgressPercentage() {\n    return (this.timeRemaining / this.props.duration) * 100;\n  }\n\n  announceToScreenReader(message) {\n    const liveRegion = document.getElementById('timer-live-region');\n    if (liveRegion) {\n      liveRegion.textContent = message;\n    }\n  }\n}"
+  }
+}

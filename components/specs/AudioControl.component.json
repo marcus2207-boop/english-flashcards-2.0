@@ -1,0 +1,231 @@
+{
+  "name": "AudioControl",
+  "description": "Audio playback control with TTS generation states and phonetic fallback",
+  "category": "molecules",
+  "relatedStories": ["ST-005a", "ST-005b", "ST-012"],
+  "props": {
+    "word": {
+      "type": "string",
+      "required": true,
+      "description": "Word to generate and play pronunciation for"
+    },
+    "engine": {
+      "type": "enum",
+      "required": false,
+      "default": "coqui",
+      "options": ["coqui", "espeak", "external"],
+      "description": "TTS engine to use"
+    },
+    "accent": {
+      "type": "string",
+      "required": false,
+      "default": "en-US",
+      "description": "Accent/voice variant"
+    },
+    "autoPlay": {
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "description": "Whether to automatically play when audio is ready"
+    },
+    "showPhonetic": {
+      "type": "boolean",
+      "required": false,
+      "default": true,
+      "description": "Whether to show phonetic transcription as fallback"
+    },
+    "size": {
+      "type": "enum",
+      "required": false,
+      "default": "medium",
+      "options": ["small", "medium", "large"],
+      "description": "Size of the control"
+    }
+  },
+  "states": {
+    "cache-check": {
+      "description": "Checking if audio exists in cache",
+      "visualChanges": "Play button with subtle loading indicator",
+      "ariaAttributes": {
+        "aria-busy": "true",
+        "aria-label": "Checking for cached audio"
+      },
+      "duration": "~100ms"
+    },
+    "generating": {
+      "description": "TTS generation in progress",
+      "visualChanges": "Spinner overlay on play button, button disabled",
+      "ariaAttributes": {
+        "aria-busy": "true",
+        "aria-label": "Generating audio for {word}"
+      },
+      "duration": "Target <5s for local Coqui"
+    },
+    "playable": {
+      "description": "Audio ready to play",
+      "visualChanges": "Play icon, button enabled",
+      "ariaAttributes": {
+        "aria-label": "Play pronunciation for {word}"
+      }
+    },
+    "playing": {
+      "description": "Audio currently playing",
+      "visualChanges": "Pause icon, subtle animation",
+      "ariaAttributes": {
+        "aria-label": "Pause pronunciation"
+      }
+    },
+    "failure": {
+      "description": "TTS generation failed",
+      "visualChanges": "Error icon, phonetic fallback shown, retry button",
+      "ariaAttributes": {
+        "aria-label": "Audio unavailable. Showing phonetic transcription. Press R to retry"
+      },
+      "fallback": "Display phonetic transcription and show toast: 'Audio niedostępne — pokazuję fonetykę'"
+    }
+  },
+  "ttsFlow": {
+    "description": "Detailed flow for TTS audio generation and playback",
+    "steps": [
+      {
+        "step": 1,
+        "action": "Compute hash key",
+        "formula": "sha256(engine + word + accent + voiceParams)",
+        "purpose": "Unique identifier for caching"
+      },
+      {
+        "step": 2,
+        "action": "Check cache",
+        "endpoint": "GET /api/tts/cache/:hash",
+        "success": "HTTP 200 → return audio URL → play",
+        "failure": "HTTP 404 → proceed to generation"
+      },
+      {
+        "step": 3,
+        "action": "Generate audio",
+        "endpoint": "POST /api/tts/generate",
+        "body": {
+          "word": "string",
+          "engine": "coqui|espeak|external",
+          "accent": "string",
+          "voiceParams": "object"
+        },
+        "response": {
+          "taskId": "uuid"
+        }
+      },
+      {
+        "step": 4,
+        "action": "Poll generation status",
+        "endpoint": "GET /api/tts/generate/:taskId",
+        "polling": {
+          "interval": "500ms",
+          "timeout": "5s for local Coqui",
+          "maxAttempts": 10
+        },
+        "responses": {
+          "pending": "Continue polling",
+          "success": "Proceed to step 5",
+          "failed": "Show failure state and fallback"
+        }
+      },
+      {
+        "step": 5,
+        "action": "Retrieve and play",
+        "endpoint": "GET /api/tts/cache/:hash",
+        "action": "Play audio via HTML5 Audio API"
+      },
+      {
+        "step": 6,
+        "action": "Handle failure",
+        "fallback": "espeak phonetic rendering",
+        "toast": "Audio niedostępne — pokazuję fonetykę",
+        "retryAvailable": true
+      }
+    ]
+  },
+  "accessibility": {
+    "role": "button",
+    "keyboardInteractions": {
+      "Space": "Toggle play/pause when focused",
+      "R": "Retry audio generation (global shortcut when card focused)"
+    },
+    "ariaLabels": [
+      "aria-label: Dynamic based on state",
+      "aria-busy: true during generation",
+      "aria-disabled: true during generation"
+    ],
+    "focusManagement": "Button receives focus. Focus indicator visible during keyboard navigation.",
+    "screenReaderAnnouncements": {
+      "generating": "Generating audio for {word}",
+      "ready": "Audio ready. Press space to play",
+      "playing": "Playing pronunciation",
+      "failed": "Audio generation failed. Showing phonetic transcription. Press R to retry"
+    },
+    "alternativeContent": {
+      "phoneticTranscription": "Always available as fallback for users who cannot hear audio",
+      "visualIndicator": "Waveform or audio icon indicates audio availability"
+    }
+  },
+  "tokens": {
+    "colors": ["color-primary", "color-neutral-900", "color-error", "color-focus"],
+    "spacing": ["spacing-xs", "spacing-sm", "spacing-md"],
+    "borderRadius": ["radius-full"],
+    "motion": ["duration-micro", "easing-standard"]
+  },
+  "sizes": {
+    "small": {
+      "buttonSize": "32px",
+      "iconSize": "16px"
+    },
+    "medium": {
+      "buttonSize": "48px",
+      "iconSize": "24px"
+    },
+    "large": {
+      "buttonSize": "64px",
+      "iconSize": "32px"
+    }
+  },
+  "examples": [
+    {
+      "name": "Session Flashcard Audio",
+      "props": {
+        "word": "cat",
+        "engine": "coqui",
+        "accent": "en-US",
+        "autoPlay": false,
+        "size": "large"
+      },
+      "description": "Primary audio control in session UI",
+      "context": "ST-005a"
+    },
+    {
+      "name": "TTS Test Control",
+      "props": {
+        "word": "hello",
+        "engine": "espeak",
+        "accent": "en-GB",
+        "autoPlay": false,
+        "size": "medium"
+      },
+      "description": "Test audio in TTS settings",
+      "context": "ST-012"
+    },
+    {
+      "name": "Failed Generation",
+      "props": {
+        "word": "complicated",
+        "engine": "coqui",
+        "showPhonetic": true
+      },
+      "description": "Audio control showing failure state with phonetic fallback",
+      "context": "ST-005a"
+    }
+  ],
+  "implementation": {
+    "html": "<div class=\"audio-control audio-control--{size}\" role=\"group\" aria-label=\"Audio pronunciation for {word}\">\n  <button \n    class=\"audio-control__button\"\n    aria-label=\"{dynamicLabel}\"\n    aria-busy=\"{isBusy}\"\n    disabled=\"{isGenerating}\"\n    onclick=\"{handlePlay}\">\n    {state === 'generating' && <Spinner />}\n    {state === 'playable' && <PlayIcon />}\n    {state === 'playing' && <PauseIcon />}\n    {state === 'failure' && <ErrorIcon />}\n  </button>\n  \n  {state === 'failure' && showPhonetic && (\n    <div class=\"audio-control__fallback\" role=\"status\">\n      <span class=\"phonetic-text\">{phoneticTranscription}</span>\n      <button class=\"retry-button\" aria-label=\"Retry audio generation\">Retry</button>\n    </div>\n  )}\n</div>",
+    "css": ".audio-control__button {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  border-radius: var(--radius-full);\n  background-color: var(--color-surface);\n  border: 2px solid var(--color-neutral-200);\n  cursor: pointer;\n  transition: all var(--duration-micro) var(--easing-standard);\n}\n\n.audio-control__button:hover:not(:disabled) {\n  background-color: var(--color-primary);\n  border-color: var(--color-primary);\n  color: var(--color-surface);\n}\n\n.audio-control__button:focus-visible {\n  outline: var(--focus-ring-width) solid var(--color-focus);\n  outline-offset: var(--focus-ring-offset);\n}\n\n.audio-control__button:disabled {\n  opacity: 0.5;\n  cursor: not-allowed;\n}\n\n.audio-control--small .audio-control__button {\n  width: 32px;\n  height: 32px;\n}\n\n.audio-control--medium .audio-control__button {\n  width: 48px;\n  height: 48px;\n}\n\n.audio-control--large .audio-control__button {\n  width: 64px;\n  height: 64px;\n}\n\n.audio-control__fallback {\n  margin-top: var(--spacing-sm);\n  padding: var(--spacing-xs) var(--spacing-sm);\n  background-color: var(--phonetic-hint-bg);\n  border-radius: var(--radius-sm);\n}\n\n@media (prefers-reduced-motion: reduce) {\n  .audio-control__button {\n    transition: none;\n  }\n}",
+    "javascript": "class AudioControl {\n  constructor(props) {\n    this.state = 'cache-check';\n    this.props = props;\n    this.audio = null;\n  }\n\n  async checkCache() {\n    const hash = await this.computeHash();\n    const response = await fetch(`/api/tts/cache/${hash}`);\n    \n    if (response.ok) {\n      const { url } = await response.json();\n      this.setState('playable');\n      this.audio = new Audio(url);\n      return true;\n    }\n    return false;\n  }\n\n  async generateAudio() {\n    this.setState('generating');\n    \n    try {\n      const response = await fetch('/api/tts/generate', {\n        method: 'POST',\n        headers: { 'Content-Type': 'application/json' },\n        body: JSON.stringify({\n          word: this.props.word,\n          engine: this.props.engine,\n          accent: this.props.accent\n        })\n      });\n      \n      const { taskId } = await response.json();\n      await this.pollStatus(taskId);\n    } catch (error) {\n      this.handleFailure();\n    }\n  }\n\n  async pollStatus(taskId) {\n    const maxAttempts = 10;\n    const interval = 500;\n    \n    for (let i = 0; i < maxAttempts; i++) {\n      await new Promise(resolve => setTimeout(resolve, interval));\n      \n      const response = await fetch(`/api/tts/generate/${taskId}`);\n      const { status } = await response.json();\n      \n      if (status === 'success') {\n        await this.checkCache();\n        return;\n      } else if (status === 'failed') {\n        this.handleFailure();\n        return;\n      }\n    }\n    \n    this.handleFailure();\n  }\n\n  handleFailure() {\n    this.setState('failure');\n    this.showToast('Audio niedostępne — pokazuję fonetykę');\n  }\n\n  async play() {\n    if (!this.audio) {\n      const cacheHit = await this.checkCache();\n      if (!cacheHit) {\n        await this.generateAudio();\n      }\n    }\n    \n    if (this.audio) {\n      this.setState('playing');\n      await this.audio.play();\n      this.audio.onended = () => this.setState('playable');\n    }\n  }\n\n  pause() {\n    if (this.audio) {\n      this.audio.pause();\n      this.setState('playable');\n    }\n  }\n}"
+  }
+}
