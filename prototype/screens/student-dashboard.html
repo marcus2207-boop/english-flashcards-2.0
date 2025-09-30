@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - English Flashcards 2.0</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/styles/tokens.css">
+    <link rel="stylesheet" href="../assets/styles/components.css">
+    <link rel="stylesheet" href="../assets/styles/screens.css">
+</head>
+<body>
+    <!-- Screen Header -->
+    <header class="screen-header">
+        <nav class="screen-header__nav" aria-label="Główna nawigacja">
+            <a href="../index.html" class="screen-header__back">← Prototyp</a>
+            <h2 class="screen-header__title">Dashboard</h2>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="screen-main" role="main">
+        <!-- Hero Section -->
+        <section class="dashboard-hero" aria-labelledby="hero-title">
+            <h1 id="hero-title" class="dashboard-hero__title">Witaj, Laura! 👋</h1>
+            <p class="dashboard-hero__subtitle">Gotowa na nową sesję nauki?</p>
+            <a href="session.html" class="btn btn--primary btn--large">
+                🚀 Rozpocznij sesję 15-minutową
+            </a>
+        </section>
+
+        <!-- Stats Cards -->
+        <section aria-label="Statystyki nauki">
+            <div class="stats-grid">
+                <!-- Mastered Card -->
+                <div class="stat-card">
+                    <svg class="stat-card__icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <circle cx="24" cy="24" r="20" fill="#16A34A" opacity="0.1"/>
+                        <path d="M24 6l4.5 9.5 10.5 1.5-7.5 7.5 1.5 10.5-9-5-9 5 1.5-10.5-7.5-7.5 10.5-1.5z" fill="#16A34A"/>
+                    </svg>
+                    <div class="stat-card__value">45</div>
+                    <div class="stat-card__label">słówek opanowanych</div>
+                </div>
+
+                <!-- Average Score Card -->
+                <div class="stat-card">
+                    <svg class="stat-card__icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <circle cx="24" cy="24" r="20" fill="#4F46E5" opacity="0.1"/>
+                        <path d="M14 28l6-8 6 4 8-10" stroke="#4F46E5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <div class="stat-card__value">87%</div>
+                    <div class="stat-card__label">średni wynik (7 dni)</div>
+                </div>
+
+                <!-- Next Due Card -->
+                <div class="stat-card">
+                    <svg class="stat-card__icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <circle cx="24" cy="24" r="20" fill="#F59E0B" opacity="0.1"/>
+                        <circle cx="24" cy="24" r="16" stroke="#F59E0B" stroke-width="2"/>
+                        <path d="M24 12v12l8 4" stroke="#F59E0B" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <div class="stat-card__value">Za 2h</div>
+                    <div class="stat-card__label">następna sesja zalecana</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Sessions -->
+        <section class="card" aria-labelledby="recent-sessions-title">
+            <div class="card__header">
+                <h2 id="recent-sessions-title" class="card__title">Ostatnie sesje</h2>
+            </div>
+
+            <!-- Session List -->
+            <div role="list" aria-label="Lista ostatnich sesji">
+                <!-- Session Item 1 -->
+                <div class="list-item" role="listitem">
+                    <div>
+                        <div style="display: flex; gap: var(--spacing-md); align-items: center; margin-bottom: var(--spacing-xs);">
+                            <span style="color: var(--color-neutral-700); font-size: var(--fontSize-base);">
+                                📅 Dzisiaj, 14:30
+                            </span>
+                            <span class="badge badge--success">85%</span>
+                        </div>
+                        <div style="color: var(--color-neutral-700); font-size: var(--fontSize-caption);">
+                            15 słówek · 10 poprawnych · 5 błędów
+                        </div>
+                    </div>
+                    <button class="btn btn--secondary btn--small">Powtórz błędy</button>
+                </div>
+
+                <!-- Session Item 2 -->
+                <div class="list-item" role="listitem">
+                    <div>
+                        <div style="display: flex; gap: var(--spacing-md); align-items: center; margin-bottom: var(--spacing-xs);">
+                            <span style="color: var(--color-neutral-700); font-size: var(--fontSize-base);">
+                                📅 Wczoraj, 16:45
+                            </span>
+                            <span class="badge badge--success">92%</span>
+                        </div>
+                        <div style="color: var(--color-neutral-700); font-size: var(--fontSize-caption);">
+                            12 słówek · 11 poprawnych · 1 błąd
+                        </div>
+                    </div>
+                    <button class="btn btn--secondary btn--small">Powtórz błędy</button>
+                </div>
+
+                <!-- Session Item 3 -->
+                <div class="list-item" role="listitem">
+                    <div>
+                        <div style="display: flex; gap: var(--spacing-md); align-items: center; margin-bottom: var(--spacing-xs);">
+                            <span style="color: var(--color-neutral-700); font-size: var(--fontSize-base);">
+                                📅 Przedwczoraj, 18:20
+                            </span>
+                            <span class="badge badge--warning">73%</span>
+                        </div>
+                        <div style="color: var(--color-neutral-700); font-size: var(--fontSize-caption);">
+                            20 słówek · 14 poprawnych · 6 błędów
+                        </div>
+                    </div>
+                    <button class="btn btn--secondary btn--small">Powtórz błędy</button>
+                </div>
+            </div>
+
+            <!-- View All Button -->
+            <div style="margin-top: var(--spacing-lg); text-align: center;">
+                <button class="btn btn--ghost">Zobacz wszystkie sesje →</button>
+            </div>
+        </section>
+
+        <!-- Empty State Example (hidden by default) -->
+        <section class="card" style="display: none;" id="emptyState" aria-label="Brak sesji">
+            <div class="empty-state">
+                <svg class="empty-state__icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="2"/>
+                    <path d="M32 20v16M32 44h.02" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <h3 class="empty-state__title">Brak sesji nauki</h3>
+                <p class="empty-state__description">
+                    Rozpocznij swoją pierwszą sesję, aby zobaczyć tutaj statystyki i postępy!
+                </p>
+                <a href="session.html" class="btn btn--primary">Rozpocznij teraz</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="screen-footer" role="contentinfo">
+        <p>English Flashcards 2.0 - Prototyp UI · <a href="../index.html" style="color: var(--color-primary);">Powrót do index</a></p>
+    </footer>
+
+    <script>
+        // Mock data toggle for demo
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('empty') === 'true') {
+            document.querySelector('.stats-grid').parentElement.style.display = 'none';
+            document.querySelector('#recent-sessions-title').parentElement.style.display = 'none';
+            document.getElementById('emptyState').style.display = 'block';
+        }
+
+        // Button click handlers (mock)
+        document.querySelectorAll('.btn--secondary').forEach(btn => {
+            btn.addEventListener('click', function() {
+                alert('Funkcja "Powtórz błędy" - przekierowuje do nowej sesji tylko z błędnymi kartami (To jest prototyp)');
+            });
+        });
+    </script>
+</body>
+</html>

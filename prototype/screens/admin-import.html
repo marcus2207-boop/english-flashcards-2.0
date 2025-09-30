@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Import danych - English Flashcards 2.0</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/styles/tokens.css">
+    <link rel="stylesheet" href="../assets/styles/components.css">
+    <link rel="stylesheet" href="../assets/styles/screens.css">
+</head>
+<body>
+    <header class="screen-header">
+        <nav class="screen-header__nav" aria-label="Główna nawigacja">
+            <a href="admin-dashboard.html" class="screen-header__back">← Admin Dashboard</a>
+            <h2 class="screen-header__title">Import danych</h2>
+        </nav>
+    </header>
+
+    <main class="screen-main" role="main">
+        <!-- Upload Section -->
+        <section class="card" style="margin-bottom: var(--spacing-xl);">
+            <h2 class="card__title">Prześlij plik</h2>
+            <p style="color: var(--color-neutral-700); margin-bottom: var(--spacing-lg);">
+                Obsługiwane formaty: CSV, JSON, Excel (.xlsx)
+            </p>
+            
+            <div style="border: 2px dashed var(--color-neutral-400); border-radius: var(--radius-md); padding: var(--spacing-xxl); text-align: center; background-color: var(--color-background);">
+                <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 0 auto var(--spacing-md);" aria-hidden="true">
+                    <circle cx="32" cy="32" r="28" stroke="#4F46E5" stroke-width="2" opacity="0.3"/>
+                    <path d="M32 20v24M20 32h24" stroke="#4F46E5" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+                <p style="margin-bottom: var(--spacing-md); font-weight: var(--font-weight-semibold);">
+                    Przeciągnij plik tutaj lub kliknij aby wybrać
+                </p>
+                <input type="file" id="fileInput" style="display: none;" accept=".csv,.json,.xlsx">
+                <button class="btn btn--primary" onclick="document.getElementById('fileInput').click()">
+                    Wybierz plik
+                </button>
+            </div>
+
+            <!-- File Format Info -->
+            <details style="margin-top: var(--spacing-lg);">
+                <summary style="cursor: pointer; font-weight: var(--font-weight-semibold); color: var(--color-primary);">
+                    Wymagany format pliku CSV
+                </summary>
+                <div style="margin-top: var(--spacing-sm); padding: var(--spacing-md); background-color: var(--phonetic-hint-bg); border-radius: var(--radius-sm); font-family: monospace; font-size: var(--fontSize-caption);">
+                    <code>
+                        english,polish,phonetic,difficulty,category<br>
+                        apple,jabłko,/ˈæp.əl/,easy,food<br>
+                        banana,banan,/bəˈnɑː.nə/,easy,food
+                    </code>
+                </div>
+            </details>
+        </section>
+
+        <!-- Import History -->
+        <section class="card">
+            <h2 class="card__title">Historia importów</h2>
+            
+            <div class="list-item">
+                <div>
+                    <div style="font-weight: var(--font-weight-semibold); margin-bottom: var(--spacing-xs);">
+                        vocabulary_2024.csv
+                    </div>
+                    <div style="color: var(--color-neutral-700); font-size: var(--fontSize-caption);">
+                        15.01.2024, 14:30 · 120 wierszy · przez admin@example.com
+                    </div>
+                </div>
+                <span class="badge badge--success">✓ Sukces</span>
+            </div>
+
+            <div class="list-item">
+                <div>
+                    <div style="font-weight: var(--font-weight-semibold); margin-bottom: var(--spacing-xs);">
+                        animals.json
+                    </div>
+                    <div style="color: var(--color-neutral-700); font-size: var(--fontSize-caption);">
+                        14.01.2024, 10:15 · 85 wierszy · przez teacher@example.com
+                    </div>
+                </div>
+                <span class="badge badge--success">✓ Sukces</span>
+            </div>
+
+            <div class="list-item">
+                <div>
+                    <div style="font-weight: var(--font-weight-semibold); margin-bottom: var(--spacing-xs);">
+                        test_data.csv
+                    </div>
+                    <div style="color: var(--color-neutral-700); font-size: var(--fontSize-caption);">
+                        13.01.2024, 16:45 · 0 wierszy · przez admin@example.com
+                    </div>
+                </div>
+                <span class="badge badge--error">✗ Błąd</span>
+            </div>
+        </section>
+    </main>
+
+    <footer class="screen-footer" role="contentinfo">
+        <p>English Flashcards 2.0 - Prototyp UI · <a href="../index.html" style="color: var(--color-primary);">Powrót do index</a></p>
+    </footer>
+
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                alert(`Wybrano plik: ${e.target.files[0].name}\n(To jest prototyp - w rzeczywistej aplikacji plik zostałby przesłany)`);
+            }
+        });
+    </script>
+</body>
+</html>

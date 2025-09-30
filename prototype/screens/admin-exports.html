@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eksporty - English Flashcards 2.0</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/styles/tokens.css">
+    <link rel="stylesheet" href="../assets/styles/components.css">
+    <link rel="stylesheet" href="../assets/styles/screens.css">
+</head>
+<body>
+    <header class="screen-header">
+        <nav class="screen-header__nav" aria-label="Główna nawigacja">
+            <a href="admin-dashboard.html" class="screen-header__back">← Admin Dashboard</a>
+            <h2 class="screen-header__title">Zarządzanie eksportami</h2>
+        </nav>
+    </header>
+
+    <main class="screen-main" role="main">
+        <!-- New Export Section -->
+        <section class="card" style="margin-bottom: var(--spacing-xl);">
+            <h2 class="card__title">Utwórz nowy eksport</h2>
+            <p style="color: var(--color-neutral-700); margin-bottom: var(--spacing-lg);">
+                Wybierz dane do wyeksportowania
+            </p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-md); margin-bottom: var(--spacing-lg);">
+                <div style="padding: var(--spacing-md); border: 2px solid var(--color-neutral-200); border-radius: var(--radius-md); cursor: pointer; transition: all var(--duration-micro);" class="export-option">
+                    <input type="checkbox" id="export-vocab" style="margin-right: var(--spacing-xs);">
+                    <label for="export-vocab" style="font-weight: var(--font-weight-semibold); cursor: pointer;">Słownictwo</label>
+                    <p style="color: var(--color-neutral-700); font-size: var(--fontSize-caption); margin: var(--spacing-xs) 0 0 0;">
+                        Wszystkie fiszki w bazie (1,245 pozycji)
+                    </p>
+                </div>
+
+                <div style="padding: var(--spacing-md); border: 2px solid var(--color-neutral-200); border-radius: var(--radius-md); cursor: pointer; transition: all var(--duration-micro);" class="export-option">
+                    <input type="checkbox" id="export-users" style="margin-right: var(--spacing-xs);">
+                    <label for="export-users" style="font-weight: var(--font-weight-semibold); cursor: pointer;">Użytkownicy</label>
+                    <p style="color: var(--color-neutral-700); font-size: var(--fontSize-caption); margin: var(--spacing-xs) 0 0 0;">
+                        Lista użytkowników i ich profile
+                    </p>
+                </div>
+
+                <div style="padding: var(--spacing-md); border: 2px solid var(--color-neutral-200); border-radius: var(--radius-md); cursor: pointer; transition: all var(--duration-micro);" class="export-option">
+                    <input type="checkbox" id="export-sessions" style="margin-right: var(--spacing-xs);">
+                    <label for="export-sessions" style="font-weight: var(--font-weight-semibold); cursor: pointer;">Historia sesji</label>
+                    <p style="color: var(--color-neutral-700); font-size: var(--fontSize-caption); margin: var(--spacing-xs) 0 0 0;">
+                        Wszystkie sesje nauki i wyniki
+                    </p>
+                </div>
+
+                <div style="padding: var(--spacing-md); border: 2px solid var(--color-neutral-200); border-radius: var(--radius-md); cursor: pointer; transition: all var(--duration-micro);" class="export-option">
+                    <input type="checkbox" id="export-progress" style="margin-right: var(--spacing-xs);">
+                    <label for="export-progress" style="font-weight: var(--font-weight-semibold); cursor: pointer;">Postępy nauki</label>
+                    <p style="color: var(--color-neutral-700); font-size: var(--fontSize-caption); margin: var(--spacing-xs) 0 0 0;">
+                        Statystyki i dane spaced repetition
+                    </p>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: var(--spacing-md); align-items: center;">
+                <select style="flex: 1; height: 40px; padding: var(--spacing-sm) var(--spacing-md); border: 1px solid var(--color-neutral-400); border-radius: var(--radius-sm); font-family: var(--font-family-base);" aria-label="Format eksportu">
+                    <option>Format: JSON</option>
+                    <option>Format: CSV</option>
+                    <option>Format: Excel (.xlsx)</option>
+                </select>
+                <button class="btn btn--primary">Generuj eksport</button>
+            </div>
+        </section>
+
+        <!-- Export Queue -->
+        <section class="card">
+            <h2 class="card__title">Historia eksportów</h2>
+            
+            <!-- In Progress Export -->
+            <div class="list-item" style="background-color: #FEF3C7; border-radius: var(--radius-sm);">
+                <div style="flex: 1;">
+                    <div style="font-weight: var(--font-weight-semibold); margin-bottom: var(--spacing-xs); display: flex; align-items: center; gap: var(--spacing-xs);">
+                        <span>⏳</span> export_2024-01-15_vocabulary.zip
+                    </div>
+                    <div style="color: var(--color-neutral-700); font-size: var(--fontSize-caption); margin-bottom: var(--spacing-xs);">
+                        Generowanie... 45% · Pozostało ~2 min
+                    </div>
+                    <div style="height: 8px; background-color: var(--color-neutral-200); border-radius: var(--radius-sm); overflow: hidden;">
+                        <div style="height: 100%; width: 45%; background-color: var(--color-warning); transition: width 1s linear;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Completed Export -->
+            <div class="list-item">
+                <div>
+                    <div style="font-weight: var(--font-weight-semibold); margin-bottom: var(--spacing-xs); display: flex; align-items: center; gap: var(--spacing-xs);">
+                        <span>✓</span> export_2024-01-14_full.zip
+                    </div>
+                    <div style="color: var(--color-neutral-700); font-size: var(--fontSize-caption);">
+                        14.01.2024, 16:30 · 2.4 MB · przez admin@example.com
+                    </div>
+                </div>
+                <button class="btn btn--secondary btn--small">📥 Pobierz</button>
+            </div>
+
+            <!-- Completed Export -->
+            <div class="list-item">
+                <div>
+                    <div style="font-weight: var(--font-weight-semibold); margin-bottom: var(--spacing-xs); display: flex; align-items: center; gap: var(--spacing-xs);">
+                        <span>✓</span> export_2024-01-13_users.csv
+                    </div>
+                    <div style="color: var(--color-neutral-700); font-size: var(--fontSize-caption);">
+                        13.01.2024, 10:15 · 156 KB · przez admin@example.com
+                    </div>
+                </div>
+                <button class="btn btn--secondary btn--small">📥 Pobierz</button>
+            </div>
+
+            <!-- Failed Export -->
+            <div class="list-item">
+                <div>
+                    <div style="font-weight: var(--font-weight-semibold); margin-bottom: var(--spacing-xs); display: flex; align-items: center; gap: var(--spacing-xs);">
+                        <span>✗</span> export_2024-01-12_sessions.json
+                    </div>
+                    <div style="color: var(--color-error); font-size: var(--fontSize-caption);">
+                        12.01.2024, 14:20 · Błąd: Przekroczono limit czasu
+                    </div>
+                </div>
+                <button class="btn btn--ghost btn--small">Ponów</button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="screen-footer" role="contentinfo">
+        <p>English Flashcards 2.0 - Prototyp UI · <a href="../index.html" style="color: var(--color-primary);">Powrót do index</a></p>
+    </footer>
+
+    <style>
+        .export-option:hover {
+            border-color: var(--color-primary);
+            background-color: var(--color-background);
+        }
+    </style>
+
+    <script>
+        document.querySelector('.btn--primary').addEventListener('click', function() {
+            const checked = document.querySelectorAll('input[type="checkbox"]:checked').length;
+            if (checked === 0) {
+                alert('Wybierz co najmniej jedną opcję eksportu');
+            } else {
+                alert(`Rozpoczynanie eksportu ${checked} elementów (To jest prototyp)`);
+            }
+        });
+    </script>
+</body>
+</html>

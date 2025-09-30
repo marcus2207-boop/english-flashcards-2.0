@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zaloguj się - English Flashcards 2.0</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/styles/tokens.css">
+    <link rel="stylesheet" href="../assets/styles/components.css">
+    <link rel="stylesheet" href="../assets/styles/screens.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <!-- Logo -->
+            <svg class="login-logo" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <rect width="80" height="80" rx="12" fill="#4F46E5"/>
+                <path d="M25 30h30M25 40h30M25 50h20" stroke="white" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+
+            <!-- Heading -->
+            <h1 class="login-title">Zaloguj się</h1>
+
+            <!-- Login Form -->
+            <form role="form" aria-label="Formularz logowania" id="loginForm" novalidate>
+                <!-- Email Field -->
+                <div class="form-group">
+                    <label for="email" class="form-label">Email</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email"
+                        class="form-input"
+                        placeholder="twoj@email.pl"
+                        required
+                        aria-required="true"
+                        aria-describedby="email-error"
+                        autocomplete="email"
+                    >
+                    <span id="email-error" class="form-error" role="alert" aria-live="assertive"></span>
+                </div>
+
+                <!-- Password Field -->
+                <div class="form-group">
+                    <label for="password" class="form-label">Hasło</label>
+                    <div class="password-field">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password"
+                            class="form-input"
+                            placeholder="••••••••••"
+                            required
+                            aria-required="true"
+                            aria-describedby="password-error"
+                            autocomplete="current-password"
+                            minlength="10"
+                        >
+                        <button 
+                            type="button" 
+                            class="password-toggle" 
+                            id="togglePassword"
+                            aria-label="Pokaż hasło"
+                        >
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                    <span id="password-error" class="form-error" role="alert" aria-live="assertive"></span>
+                </div>
+
+                <!-- Remember Me -->
+                <div class="form-checkbox">
+                    <input 
+                        type="checkbox" 
+                        id="remember" 
+                        name="remember"
+                    >
+                    <label for="remember">Zapamiętaj mnie</label>
+                </div>
+
+                <!-- Login Button -->
+                <button 
+                    type="submit" 
+                    class="btn btn--primary btn--large btn--full-width"
+                    id="loginButton"
+                >
+                    Zaloguj się
+                </button>
+            </form>
+
+            <!-- Back to Index Link (for prototype navigation) -->
+            <div style="text-align: center; margin-top: var(--spacing-lg);">
+                <a href="../index.html" style="color: var(--color-primary); text-decoration: none; font-size: var(--fontSize-caption);">
+                    ← Powrót do prototypu
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" style="position: fixed; top: var(--spacing-lg); right: var(--spacing-lg); z-index: 1000;"></div>
+
+    <script>
+        // Password toggle functionality
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            
+            if (type === 'text') {
+                togglePassword.setAttribute('aria-label', 'Ukryj hasło');
+                togglePassword.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>';
+            } else {
+                togglePassword.setAttribute('aria-label', 'Pokaż hasło');
+                togglePassword.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+            }
+        });
+
+        // Form validation and submission (mock)
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const emailError = document.getElementById('email-error');
+        const passwordError = document.getElementById('password-error');
+        const loginButton = document.getElementById('loginButton');
+
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Clear previous errors
+            emailError.textContent = '';
+            passwordError.textContent = '';
+            emailInput.classList.remove('error');
+            passwordInput.classList.remove('error');
+            emailInput.removeAttribute('aria-invalid');
+            passwordInput.removeAttribute('aria-invalid');
+
+            let hasError = false;
+
+            // Email validation
+            const emailValue = emailInput.value.trim();
+            if (!emailValue) {
+                emailError.textContent = 'Email jest wymagany';
+                emailInput.classList.add('error');
+                emailInput.setAttribute('aria-invalid', 'true');
+                hasError = true;
+            } else if (!emailValue.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+                emailError.textContent = 'Nieprawidłowy email';
+                emailInput.classList.add('error');
+                emailInput.setAttribute('aria-invalid', 'true');
+                hasError = true;
+            }
+
+            // Password validation
+            const passwordValue = passwordInput.value;
+            if (!passwordValue) {
+                passwordError.textContent = 'Hasło jest wymagane';
+                passwordInput.classList.add('error');
+                passwordInput.setAttribute('aria-invalid', 'true');
+                hasError = true;
+            } else if (passwordValue.length < 10) {
+                passwordError.textContent = 'Hasło musi mieć minimum 10 znaków';
+                passwordInput.classList.add('error');
+                passwordInput.setAttribute('aria-invalid', 'true');
+                hasError = true;
+            }
+
+            if (hasError) {
+                return;
+            }
+
+            // Show loading state
+            loginButton.textContent = 'Logowanie...';
+            loginButton.disabled = true;
+            loginButton.setAttribute('aria-busy', 'true');
+
+            // Simulate API call
+            setTimeout(() => {
+                // Reset button
+                loginButton.textContent = 'Zaloguj się';
+                loginButton.disabled = false;
+                loginButton.removeAttribute('aria-busy');
+
+                // Show mock success (in real app, would redirect)
+                showToast('Zalogowano pomyślnie! (To jest prototyp)', 'success');
+                
+                // Optionally redirect to dashboard after delay
+                setTimeout(() => {
+                    window.location.href = 'student-dashboard.html';
+                }, 1500);
+            }, 1500);
+        });
+
+        // Toast notification function
+        function showToast(message, type = 'error') {
+            const toast = document.createElement('div');
+            toast.className = `toast toast--${type}`;
+            toast.setAttribute('role', 'alert');
+            toast.setAttribute('aria-live', 'assertive');
+            toast.style.cssText = `
+                background-color: ${type === 'error' ? '#DC2626' : '#16A34A'};
+                color: white;
+                padding: var(--spacing-md) var(--spacing-lg);
+                border-radius: var(--radius-md);
+                box-shadow: var(--shadow-lg);
+                margin-bottom: var(--spacing-sm);
+                animation: slideIn 0.3s ease-out;
+            `;
+            toast.textContent = message;
+
+            document.getElementById('toastContainer').appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => toast.remove(), 300);
+            }, 6000);
+        }
+
+        // Focus management
+        window.addEventListener('load', () => {
+            emailInput.focus();
+        });
+
+        // Add CSS for error state
+        const style = document.createElement('style');
+        style.textContent = `
+            .form-input.error {
+                border-color: var(--color-error);
+            }
+            .form-error {
+                display: block;
+                color: var(--color-error);
+                font-size: var(--fontSize-caption);
+                margin-top: var(--spacing-xs);
+            }
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

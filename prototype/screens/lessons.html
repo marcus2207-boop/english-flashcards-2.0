@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moje lekcje - English Flashcards 2.0</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/styles/tokens.css">
+    <link rel="stylesheet" href="../assets/styles/components.css">
+    <link rel="stylesheet" href="../assets/styles/screens.css">
+    <style>
+        .lessons-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: var(--spacing-lg);
+        }
+
+        .lessons-sidebar {
+            background-color: var(--color-surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            padding: var(--spacing-lg);
+            height: fit-content;
+            position: sticky;
+            top: calc(var(--spacing-lg) + 60px);
+        }
+
+        .lessons-content {
+            flex: 1;
+        }
+
+        .lessons-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+            gap: var(--spacing-md);
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: var(--spacing-md);
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-neutral-400);
+        }
+
+        .search-box input {
+            width: 100%;
+            height: 40px;
+            padding: var(--spacing-sm) var(--spacing-md) var(--spacing-sm) 40px;
+            border: 1px solid var(--color-neutral-400);
+            border-radius: var(--radius-md);
+            font-family: var(--font-family-base);
+            font-size: var(--fontSize-base);
+        }
+
+        .lesson-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--spacing-lg);
+        }
+
+        .lesson-card {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-neutral-200);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-sm);
+            transition: all var(--duration-micro);
+            cursor: pointer;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lesson-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .lesson-card__title {
+            font-size: var(--fontSize-h2);
+            font-weight: var(--font-weight-semibold);
+            margin: 0 0 var(--spacing-sm) 0;
+            color: var(--color-neutral-900);
+        }
+
+        .lesson-card__stats {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
+            flex-wrap: wrap;
+        }
+
+        .lesson-card__description {
+            color: var(--color-neutral-700);
+            font-size: var(--fontSize-caption);
+            margin: auto 0 var(--spacing-md) 0;
+        }
+
+        .sidebar-section {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .sidebar-section__title {
+            font-size: var(--fontSize-base);
+            font-weight: var(--font-weight-semibold);
+            margin: 0 0 var(--spacing-sm) 0;
+            color: var(--color-neutral-900);
+        }
+
+        .sidebar-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-list li {
+            padding: var(--spacing-xs) 0;
+            color: var(--color-neutral-700);
+            font-size: var(--fontSize-base);
+            cursor: pointer;
+            transition: color var(--duration-micro);
+        }
+
+        .sidebar-list li:hover {
+            color: var(--color-primary);
+        }
+
+        .sidebar-list li.active {
+            color: var(--color-primary);
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .filter-checkbox {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        @media (max-width: 1024px) {
+            .lessons-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .lessons-sidebar {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Screen Header -->
+    <header class="screen-header">
+        <nav class="screen-header__nav" aria-label="Główna nawigacja">
+            <a href="../index.html" class="screen-header__back">← Prototyp</a>
+            <h2 class="screen-header__title">Moje lekcje</h2>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="screen-main" role="main">
+        <div class="lessons-layout">
+            <!-- Sidebar -->
+            <aside class="lessons-sidebar" aria-label="Filtry lekcji">
+                <button class="btn btn--primary btn--full-width" style="margin-bottom: var(--spacing-lg);">
+                    + Nowa lekcja
+                </button>
+
+                <div class="sidebar-section">
+                    <h3 class="sidebar-section__title">Kategorie</h3>
+                    <ul class="sidebar-list">
+                        <li class="active">Wszystkie</li>
+                        <li>Moje lekcje (8)</li>
+                        <li>Udostępnione (2)</li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3 class="sidebar-section__title">Tagi</h3>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="tag-verbs">
+                        <label for="tag-verbs">Czasowniki</label>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="tag-nouns">
+                        <label for="tag-nouns">Rzeczowniki</label>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="tag-adjectives">
+                        <label for="tag-adjectives">Przymiotniki</label>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <div class="lessons-content">
+                <!-- Header with Search -->
+                <div class="lessons-header">
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input 
+                            type="text" 
+                            placeholder="Szukaj lekcji..."
+                            aria-label="Wyszukaj lekcję"
+                        >
+                    </div>
+                    <div style="display: flex; gap: var(--spacing-xs);">
+                        <button class="btn btn--secondary btn--small" aria-label="Widok siatki" title="Widok siatki">
+                            ⊞
+                        </button>
+                        <button class="btn btn--ghost btn--small" aria-label="Widok listy" title="Widok listy">
+                            ☰
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Lesson Grid -->
+                <div class="lesson-grid" role="list" aria-label="Lista lekcji">
+                    <!-- Lesson Card 1 -->
+                    <article class="lesson-card" role="listitem" tabindex="0">
+                        <h3 class="lesson-card__title">Animals</h3>
+                        <div class="lesson-card__stats">
+                            <span class="badge badge--info">15 kart</span>
+                            <span class="badge badge--success">⭐ 87%</span>
+                        </div>
+                        <p class="lesson-card__description">
+                            Podstawowe słownictwo związane ze zwierzętami
+                        </p>
+                        <button class="btn btn--secondary btn--small">Edytuj</button>
+                    </article>
+
+                    <!-- Lesson Card 2 -->
+                    <article class="lesson-card" role="listitem" tabindex="0">
+                        <h3 class="lesson-card__title">Weather</h3>
+                        <div class="lesson-card__stats">
+                            <span class="badge badge--info">10 kart</span>
+                            <span class="badge badge--success">⭐ 92%</span>
+                        </div>
+                        <p class="lesson-card__description">
+                            Słowa opisujące pogodę i zjawiska atmosferyczne
+                        </p>
+                        <button class="btn btn--secondary btn--small">Edytuj</button>
+                    </article>
+
+                    <!-- Lesson Card 3 -->
+                    <article class="lesson-card" role="listitem" tabindex="0">
+                        <h3 class="lesson-card__title">Colors</h3>
+                        <div class="lesson-card__stats">
+                            <span class="badge badge--info">8 kart</span>
+                            <span class="badge badge--warning">⭐ 75%</span>
+                        </div>
+                        <p class="lesson-card__description">
+                            Kolory i odcienie - podstawy
+                        </p>
+                        <button class="btn btn--secondary btn--small">Edytuj</button>
+                    </article>
+
+                    <!-- Lesson Card 4 -->
+                    <article class="lesson-card" role="listitem" tabindex="0">
+                        <h3 class="lesson-card__title">Food</h3>
+                        <div class="lesson-card__stats">
+                            <span class="badge badge--info">12 kart</span>
+                            <span class="badge badge--success">⭐ 95%</span>
+                        </div>
+                        <p class="lesson-card__description">
+                            Jedzenie, napoje i produkty spożywcze
+                        </p>
+                        <button class="btn btn--secondary btn--small">Edytuj</button>
+                    </article>
+
+                    <!-- Lesson Card 5 -->
+                    <article class="lesson-card" role="listitem" tabindex="0">
+                        <h3 class="lesson-card__title">School</h3>
+                        <div class="lesson-card__stats">
+                            <span class="badge badge--info">20 kart</span>
+                            <span class="badge badge--warning">⭐ 68%</span>
+                        </div>
+                        <p class="lesson-card__description">
+                            Przedmioty szkolne i przybory
+                        </p>
+                        <button class="btn btn--secondary btn--small">Edytuj</button>
+                    </article>
+
+                    <!-- Lesson Card 6 -->
+                    <article class="lesson-card" role="listitem" tabindex="0">
+                        <h3 class="lesson-card__title">Family</h3>
+                        <div class="lesson-card__stats">
+                            <span class="badge badge--info">14 kart</span>
+                            <span class="badge badge--success">⭐ 89%</span>
+                        </div>
+                        <p class="lesson-card__description">
+                            Członkowie rodziny i relacje
+                        </p>
+                        <button class="btn btn--secondary btn--small">Edytuj</button>
+                    </article>
+                </div>
+
+                <!-- Load More -->
+                <div style="text-align: center; margin-top: var(--spacing-xl);">
+                    <button class="btn btn--ghost">Załaduj więcej →</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="screen-footer" role="contentinfo">
+        <p>English Flashcards 2.0 - Prototyp UI · <a href="../index.html" style="color: var(--color-primary);">Powrót do index</a></p>
+    </footer>
+
+    <script>
+        // Search functionality (mock)
+        const searchInput = document.querySelector('.search-box input');
+        searchInput.addEventListener('input', function(e) {
+            console.log('Searching for:', e.target.value);
+            // In real app, would filter lessons
+        });
+
+        // Card click handlers
+        document.querySelectorAll('.lesson-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                if (!e.target.classList.contains('btn')) {
+                    alert('Otwieranie szczegółów lekcji (To jest prototyp)');
+                }
+            });
+
+            card.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.target.classList.contains('btn')) {
+                    alert('Otwieranie szczegółów lekcji (To jest prototyp)');
+                }
+            });
+        });
+
+        // Edit button handlers
+        document.querySelectorAll('.lesson-card .btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                alert('Otwieranie edytora lekcji (To jest prototyp)');
+            });
+        });
+
+        // New lesson button
+        document.querySelector('.btn--primary').addEventListener('click', function() {
+            alert('Otwieranie kreatora nowej lekcji (To jest prototyp)');
+        });
+    </script>
+</body>
+</html>
