@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Flashcards 2.0 - UI Prototype</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/styles/tokens.css">
+    <link rel="stylesheet" href="assets/styles/components.css">
+    <style>
+        .prototype-nav {
+            background-color: var(--color-surface);
+            border-bottom: 1px solid var(--color-neutral-200);
+            padding: var(--spacing-lg);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .prototype-nav__title {
+            font-size: var(--fontSize-h2);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-primary);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .prototype-nav__links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+        }
+        
+        .prototype-nav__link {
+            padding: var(--spacing-xs) var(--spacing-md);
+            background-color: var(--color-background);
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            color: var(--color-neutral-900);
+            font-size: var(--fontSize-base);
+            transition: all var(--duration-micro);
+        }
+        
+        .prototype-nav__link:hover {
+            background-color: var(--color-primary);
+            color: var(--color-surface);
+        }
+        
+        .prototype-section {
+            padding: var(--spacing-xl) var(--spacing-lg);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .prototype-section h2 {
+            margin-bottom: var(--spacing-lg);
+            color: var(--color-neutral-900);
+        }
+        
+        .prototype-section h3 {
+            margin-top: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
+            color: var(--color-neutral-700);
+            font-size: 18px;
+        }
+        
+        .component-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        .component-example {
+            background-color: var(--color-surface);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--color-neutral-200);
+        }
+        
+        .component-example__label {
+            font-size: var(--fontSize-caption);
+            color: var(--color-neutral-700);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .component-example__demo {
+            padding: var(--spacing-md) 0;
+        }
+        
+        .info-banner {
+            background-color: #EEF2FF;
+            border-left: 4px solid var(--color-primary);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-sm);
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        .info-banner h3 {
+            margin: 0 0 var(--spacing-xs) 0;
+            color: var(--color-primary);
+        }
+        
+        .info-banner p {
+            margin: var(--spacing-xs) 0;
+            color: var(--color-neutral-700);
+        }
+        
+        code {
+            background-color: var(--phonetic-hint-bg);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="prototype-nav" role="navigation" aria-label="Prototype navigation">
+        <h1 class="prototype-nav__title">English Flashcards 2.0 - UI Prototype</h1>
+        <div class="prototype-nav__links">
+            <a href="#components" class="prototype-nav__link">Components</a>
+            <a href="screens/login.html" class="prototype-nav__link">Login Screen</a>
+            <a href="screens/session.html" class="prototype-nav__link">Session UI</a>
+            <a href="components/button.html" class="prototype-nav__link">Button Component</a>
+            <a href="components/audio-control.html" class="prototype-nav__link">Audio Control</a>
+            <a href="components/modal.html" class="prototype-nav__link">Modal</a>
+            <a href="components/timer.html" class="prototype-nav__link">Timer</a>
+            <a href="../a11y-report.html" class="prototype-nav__link">A11y Report</a>
+        </div>
+    </nav>
+
+    <main class="prototype-section">
+        <div class="info-banner">
+            <h3>About This Prototype</h3>
+            <p>This is a static HTML/CSS prototype demonstrating the UI components and design system for English Flashcards 2.0.</p>
+            <p><strong>Features:</strong> Design tokens, accessible components, keyboard navigation, responsive layout</p>
+            <p><strong>To run:</strong> Open this file in a browser or use <code>python3 -m http.server 8000</code></p>
+            <p><strong>Documentation:</strong> See <code>README.md</code>, <code>../design-tokens.json</code>, and <code>../components/specs/</code></p>
+        </div>
+
+        <section id="components">
+            <h2>Component Showcase</h2>
+
+            <h3>Buttons</h3>
+            <div class="component-showcase">
+                <div class="component-example">
+                    <div class="component-example__label">Primary Button</div>
+                    <div class="component-example__demo">
+                        <button class="btn btn--primary btn--medium">Start Session</button>
+                    </div>
+                </div>
+
+                <div class="component-example">
+                    <div class="component-example__label">Secondary Button</div>
+                    <div class="component-example__demo">
+                        <button class="btn btn--secondary btn--medium">Cancel</button>
+                    </div>
+                </div>
+
+                <div class="component-example">
+                    <div class="component-example__label">Ghost Button</div>
+                    <div class="component-example__demo">
+                        <button class="btn btn--ghost btn--medium">Skip</button>
+                    </div>
+                </div>
+
+                <div class="component-example">
+                    <div class="component-example__label">Large Primary Button</div>
+                    <div class="component-example__demo">
+                        <button class="btn btn--primary btn--large btn--full-width">
+                            Start 15-min Session
+                        </button>
+                    </div>
+                </div>
+
+                <div class="component-example">
+                    <div class="component-example__label">Disabled Button</div>
+                    <div class="component-example__demo">
+                        <button class="btn btn--primary btn--medium" disabled>
+                            Disabled
+                        </button>
+                    </div>
+                </div>
+
+                <div class="component-example">
+                    <div class="component-example__label">Loading Button</div>
+                    <div class="component-example__demo">
+                        <button class="btn btn--primary btn--medium btn--loading">
+                            Loading...
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Input Fields</h3>
+            <div class="component-showcase">
+                <div class="component-example">
+                    <div class="component-example__label">Text Input</div>
+                    <div class="component-example__demo">
+                        <div class="input-group">
+                            <label class="input-label" for="demo-input">Email</label>
+                            <input 
+                                type="email" 
+                                id="demo-input" 
+                                class="input" 
+                                placeholder="twoj@email.pl"
+                                aria-required="true">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="component-example">
+                    <div class="component-example__label">Input with Error</div>
+                    <div class="component-example__demo">
+                        <div class="input-group">
+                            <label class="input-label input-label--required" for="demo-input-error">
+                                Password
+                            </label>
+                            <input 
+                                type="password" 
+                                id="demo-input-error" 
+                                class="input" 
+                                aria-invalid="true"
+                                aria-describedby="error-message">
+                            <span id="error-message" class="input-error" role="alert">
+                                Hasło musi mieć minimum 10 znaków
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Audio Control</h3>
+            <div class="component-showcase">
+                <div class="component-example">
+                    <div class="component-example__label">Audio Control - Playable</div>
+                    <div class="component-example__demo" style="text-align: center;">
+                        <div class="audio-control audio-control--large">
+                            <button class="audio-control__button" aria-label="Play pronunciation for cat">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="component-example">
+                    <div class="component-example__label">Audio Control - Failure</div>
+                    <div class="component-example__demo" style="text-align: center;">
+                        <div class="audio-control audio-control--large">
+                            <button class="audio-control__button" aria-label="Audio generation failed">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm-1 9h2v6h-2v-6zm0-4h2v2h-2V7z"/>
+                                </svg>
+                            </button>
+                            <div class="audio-control__fallback">
+                                /kæt/ <button class="btn btn--ghost btn--small">Retry</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Badges</h3>
+            <div class="component-showcase">
+                <div class="component-example">
+                    <div class="component-example__label">Status Badges</div>
+                    <div class="component-example__demo">
+                        <div style="display: flex; flex-wrap: wrap; gap: var(--spacing-sm);">
+                            <span class="badge badge--success">Mastered</span>
+                            <span class="badge badge--primary">Learning</span>
+                            <span class="badge badge--warning">Review</span>
+                            <span class="badge badge--error">Error</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Timer</h3>
+            <div class="component-showcase">
+                <div class="component-example">
+                    <div class="component-example__label">Session Timer</div>
+                    <div class="component-example__demo">
+                        <div class="timer" role="timer" aria-label="Session timer">
+                            <div class="timer__display">
+                                <span class="timer__time" aria-live="polite">14:23</span>
+                                <button class="timer__control" aria-label="Pause timer">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="timer__progress" aria-hidden="true">
+                                <div class="timer__progress-bar" style="width: 75%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="component-example">
+                    <div class="component-example__label">Timer - Warning State</div>
+                    <div class="component-example__demo">
+                        <div class="timer" role="timer" aria-label="Session timer">
+                            <div class="timer__display">
+                                <span class="timer__time timer__time--warning" aria-live="polite">00:45</span>
+                                <button class="timer__control" aria-label="Pause timer">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="timer__progress" aria-hidden="true">
+                                <div class="timer__progress-bar timer__progress-bar--warning" style="width: 5%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>MCQ Options</h3>
+            <div class="component-showcase">
+                <div class="component-example">
+                    <div class="component-example__label">MCQ Buttons</div>
+                    <div class="component-example__demo">
+                        <div style="display: flex; flex-direction: column; gap: var(--spacing-sm);">
+                            <button class="mcq-option">A) kot</button>
+                            <button class="mcq-option mcq-option--selected">B) pies (selected)</button>
+                            <button class="mcq-option">C) krowa</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="component-example">
+                    <div class="component-example__label">MCQ - Correct/Incorrect</div>
+                    <div class="component-example__demo">
+                        <div style="display: flex; flex-direction: column; gap: var(--spacing-sm);">
+                            <button class="mcq-option mcq-option--correct" disabled>
+                                ✓ A) kot (Correct!)
+                            </button>
+                            <button class="mcq-option mcq-option--incorrect" disabled>
+                                ✗ B) pies (Incorrect)
+                            </button>
+                            <button class="mcq-option" disabled>C) krowa</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Cards</h3>
+            <div class="component-showcase">
+                <div class="component-example">
+                    <div class="component-example__label">Basic Card</div>
+                    <div class="component-example__demo">
+                        <div class="card">
+                            <h3 style="margin-bottom: var(--spacing-sm);">Card Title</h3>
+                            <p style="color: var(--color-neutral-700);">
+                                This is a basic card component with padding and shadow.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section style="margin-top: var(--spacing-xxl);">
+            <h2>Design Tokens</h2>
+            <div class="info-banner">
+                <h3>CSS Custom Properties</h3>
+                <p>All components use design tokens from <code>design-tokens.json</code></p>
+                <p><strong>Example:</strong> <code>color: var(--color-primary);</code></p>
+                <p><strong>View all tokens:</strong> See <code>assets/styles/tokens.css</code></p>
+            </div>
+        </section>
+
+        <section style="margin-top: var(--spacing-xxl);">
+            <h2>Accessibility Features</h2>
+            <ul style="list-style: none; padding: 0;">
+                <li style="padding: var(--spacing-sm) 0;">✓ WCAG 2.1 Level AA compliant</li>
+                <li style="padding: var(--spacing-sm) 0;">✓ Full keyboard navigation (Tab, Enter, Space, Esc)</li>
+                <li style="padding: var(--spacing-sm) 0;">✓ Focus indicators visible (2px outline)</li>
+                <li style="padding: var(--spacing-sm) 0;">✓ ARIA attributes on all interactive elements</li>
+                <li style="padding: var(--spacing-sm) 0;">✓ Screen reader announcements via aria-live</li>
+                <li style="padding: var(--spacing-sm) 0;">✓ Reduced motion support</li>
+                <li style="padding: var(--spacing-sm) 0;">✓ Color contrast meets AA standard (4.5:1)</li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- Live region for screen reader announcements -->
+    <div aria-live="polite" aria-atomic="true" class="live-region"></div>
+</body>
+</html>
