@@ -74,16 +74,76 @@ This checklist validates the UX/UI implementation against requirements from AI_H
 - [x] Screen reader announcements
 - [x] SR state updates after answers
 
-### Additional Screens
-- [ ] Student Dashboard (ST-008) - Created placeholder
-- [ ] Lessons list & editor (ST-004, ST-010) - Created placeholder
-- [ ] Admin Dashboard (ST-009) - Created placeholder
-- [ ] Admin Import (ST-003) - Created placeholder
-- [ ] Admin Users (ST-002) - Created placeholder
-- [ ] Exports view (ST-009) - Created placeholder
-- [ ] Settings/TTS (ST-005b, ST-012) - Created placeholder
+### Student Dashboard (ST-008)
+- [x] Hero section with CTA button specified
+- [x] Stats cards layout (3-column grid)
+- [x] Recent sessions list with repeat mistakes
+- [x] Empty and loading states
+- [x] Backend integration (GET /api/users/:id/summary)
+- [x] Responsive behavior (mobile stack)
+- [x] Accessibility (ARIA labels, screen reader)
+- [x] Testing checklist (22 items)
 
-**Note:** Placeholder specs created; detailed specifications follow same pattern as Login and Session screens.
+### Lessons List & Editor (ST-004, ST-010)
+- [x] Two-column layout with sidebar
+- [x] Lesson cards with stats
+- [x] Search and filter functionality
+- [x] Lesson editor modal with drag-and-drop
+- [x] Backend integration (CRUD endpoints)
+- [x] Empty states
+- [x] Responsive behavior (accordion on mobile)
+- [x] Accessibility and keyboard navigation
+
+### Admin Dashboard (ST-009)
+- [x] Two-column layout with stats and activity
+- [x] Charts for active users and sessions
+- [x] Recent imports and exports panels
+- [x] Quick action buttons
+- [x] Backend integration (dashboard stats, polling)
+- [x] Empty states
+- [x] Responsive behavior
+- [x] Accessibility (chart descriptions, ARIA)
+
+### Admin Import (ST-003)
+- [x] Drag-and-drop file upload
+- [x] Field mapping with auto-detection
+- [x] Preview table with inline editing
+- [x] Transactional mode toggle (>50% rule)
+- [x] Import progress with polling
+- [x] Backend integration (upload, validate, commit)
+- [x] Error states and rollback
+- [x] Responsive behavior (card layout on mobile)
+
+### Admin Users (ST-002)
+- [x] User table with search and sort
+- [x] Create/Edit user modal
+- [x] Delete with confirmation
+- [x] Role and status management
+- [x] Backend integration (CRUD, audit log)
+- [x] Pagination
+- [x] Responsive behavior (card layout on mobile)
+- [x] Accessibility (form labels, ARIA)
+
+### Admin Exports (ST-009)
+- [x] Active exports with progress bars
+- [x] Export history list
+- [x] Download and delete actions
+- [x] New export modal (CSV/JSON)
+- [x] Backend integration (create, progress polling)
+- [x] Empty states
+- [x] Responsive behavior
+- [x] Accessibility (progress announcements)
+
+### Settings/TTS (ST-005b, ST-012)
+- [x] Sidebar navigation with categories
+- [x] TTS settings (auto-play, voice, speed, volume)
+- [x] TTS test with generation and playback
+- [x] Cache management
+- [x] Backend integration (settings API, TTS test)
+- [x] Responsive behavior (accordion on mobile)
+- [x] Accessibility (sliders, toggles, ARIA)
+
+**Note:** All screen specifications now include comprehensive sections for Layout, Visual Hierarchy, Components, Element Specifications, States, Interactions, Accessibility, Responsive Behavior, Backend Integration, Design Tokens, Content Strings, and Testing Checklists.
 
 ## Keyboard Shortcuts ✅
 
