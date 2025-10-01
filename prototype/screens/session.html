@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sesja nauki - English Flashcards 2.0</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/styles/tokens.css">
+    <link rel="stylesheet" href="../assets/styles/components.css">
+    <link rel="stylesheet" href="../assets/styles/screens.css">
+</head>
+<body>
+    <!-- Session Timer Header -->
+    <div class="session-timer" role="status" aria-live="polite" aria-label="Timer sesji">
+        <div style="display: flex; align-items: center; gap: var(--spacing-md); flex: 1;">
+            <span style="font-weight: var(--font-weight-semibold); font-size: var(--fontSize-h2);">14:23</span>
+            <div style="flex: 1; height: 8px; background-color: var(--color-neutral-200); border-radius: var(--radius-sm); overflow: hidden;">
+                <div style="height: 100%; width: 65%; background-color: var(--color-primary); transition: width 1s linear;"></div>
+            </div>
+        </div>
+        <div style="display: flex; gap: var(--spacing-sm);">
+            <button class="btn btn--secondary btn--small" aria-label="Wstrzymaj sesję">⏸ Pauza</button>
+            <button class="btn btn--secondary btn--small" aria-label="Zakończ sesję">⏹ Zakończ</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="screen-main" role="main">
+        <div class="session-container">
+            <!-- Flashcard Column -->
+            <div>
+                <!-- Flashcard -->
+                <div class="flashcard" role="region" aria-label="Fiszka">
+                    <div class="flashcard__word">apple</div>
+                    <div class="flashcard__phonetic">/ˈæp.əl/</div>
+                    
+                    <!-- Audio Control -->
+                    <button class="btn btn--primary" id="audioBtn" aria-label="Odtwórz wymowę">
+                        🔊 Odtwórz wymowę
+                    </button>
+
+                    <!-- Answer UI - Multiple Choice -->
+                    <div style="width: 100%; max-width: 500px; margin-top: var(--spacing-xl);">
+                        <p style="font-size: var(--fontSize-base); color: var(--color-neutral-700); margin-bottom: var(--spacing-md); text-align: left;">
+                            Wybierz poprawne tłumaczenie:
+                        </p>
+                        <div style="display: flex; flex-direction: column; gap: var(--spacing-sm);">
+                            <button class="mcq-option" data-answer="correct">
+                                jabłko
+                            </button>
+                            <button class="mcq-option">
+                                pomarańcza
+                            </button>
+                            <button class="mcq-option">
+                                banan
+                            </button>
+                            <button class="mcq-option">
+                                gruszka
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div style="display: flex; gap: var(--spacing-md); margin-top: var(--spacing-xl);">
+                        <button class="btn btn--ghost" aria-label="Pomiń tę fiszkę">⏭ Pomiń</button>
+                        <button class="btn btn--ghost" aria-label="Cofnij ostatnią odpowiedź">↶ Cofnij</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Sidebar -->
+            <aside class="session-sidebar" role="complementary" aria-label="Statystyki sesji">
+                <h3 style="margin: 0 0 var(--spacing-md) 0; font-size: var(--fontSize-h2);">Statystyki sesji</h3>
+                
+                <div style="margin-bottom: var(--spacing-lg);">
+                    <div style="color: var(--color-neutral-700); font-size: var(--fontSize-caption); margin-bottom: var(--spacing-xs);">
+                        Ukończono
+                    </div>
+                    <div style="font-size: var(--fontSize-h1); font-weight: var(--font-weight-bold); color: var(--color-primary);">
+                        5 / 20
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: var(--spacing-md); margin-bottom: var(--spacing-lg);">
+                    <div>
+                        <div style="color: var(--color-neutral-700); font-size: var(--fontSize-caption);">Opanowane</div>
+                        <div style="font-size: var(--fontSize-h2); font-weight: var(--font-weight-semibold); color: var(--color-success);">
+                            2 🟢
+                        </div>
+                    </div>
+                    <div>
+                        <div style="color: var(--color-neutral-700); font-size: var(--fontSize-caption);">W nauce</div>
+                        <div style="font-size: var(--fontSize-h2); font-weight: var(--font-weight-semibold); color: var(--color-primary);">
+                            3 🔵
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 style="font-size: var(--fontSize-base); font-weight: var(--font-weight-semibold); margin: 0 0 var(--spacing-sm) 0;">
+                        Następne karty:
+                    </h4>
+                    <ul style="list-style: none; padding: 0; margin: 0; color: var(--color-neutral-700); font-size: var(--fontSize-caption);">
+                        <li style="padding: var(--spacing-xs) 0;">• banana</li>
+                        <li style="padding: var(--spacing-xs) 0;">• orange</li>
+                        <li style="padding: var(--spacing-xs) 0;">• grape</li>
+                        <li style="padding: var(--spacing-xs) 0;">• lemon</li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <!-- Keyboard Shortcuts Info -->
+    <div style="position: fixed; bottom: var(--spacing-md); left: var(--spacing-md); background: var(--color-surface); padding: var(--spacing-sm); border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); font-size: var(--fontSize-caption); color: var(--color-neutral-700);">
+        Skróty: <kbd>Space</kbd> = audio · <kbd>Enter</kbd> = potwierdź · <kbd>Ctrl+Z</kbd> = cofnij
+    </div>
+
+    <style>
+        .mcq-option {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: 2px solid var(--color-neutral-400);
+            border-radius: var(--radius-md);
+            background-color: var(--color-surface);
+            font-family: var(--font-family-base);
+            font-size: var(--fontSize-base);
+            cursor: pointer;
+            transition: all var(--duration-micro);
+            text-align: left;
+        }
+
+        .mcq-option:hover {
+            border-color: var(--color-primary);
+            background-color: var(--color-background);
+        }
+
+        .mcq-option:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px var(--color-focus);
+        }
+
+        .mcq-option.selected {
+            border-color: var(--color-primary);
+            background-color: #EEF2FF;
+        }
+
+        .mcq-option.correct {
+            border-color: var(--color-success);
+            background-color: #D1FAE5;
+        }
+
+        .mcq-option.incorrect {
+            border-color: var(--color-error);
+            background-color: #FEE2E2;
+        }
+
+        kbd {
+            background-color: var(--color-neutral-200);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 11px;
+        }
+    </style>
+
+    <script>
+        // Audio button mock
+        const audioBtn = document.getElementById('audioBtn');
+        let audioPlaying = false;
+
+        audioBtn.addEventListener('click', function() {
+            if (audioPlaying) return;
+            
+            audioPlaying = true;
+            audioBtn.textContent = '⏳ Generowanie...';
+            audioBtn.disabled = true;
+
+            setTimeout(() => {
+                audioBtn.textContent = '▶️ Odtwarzanie...';
+                setTimeout(() => {
+                    audioBtn.textContent = '🔊 Odtwórz wymowę';
+                    audioBtn.disabled = false;
+                    audioPlaying = false;
+                }, 2000);
+            }, 1000);
+        });
+
+        // MCQ interaction
+        const mcqOptions = document.querySelectorAll('.mcq-option');
+        
+        mcqOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove previous selection
+                mcqOptions.forEach(opt => opt.classList.remove('selected', 'correct', 'incorrect'));
+                
+                // Mark selection
+                this.classList.add('selected');
+                
+                // Check answer after short delay
+                setTimeout(() => {
+                    if (this.dataset.answer === 'correct') {
+                        this.classList.remove('selected');
+                        this.classList.add('correct');
+                        // Show success feedback
+                        announceToScreenReader('Poprawna odpowiedź!');
+                        
+                        // Load next card after delay
+                        setTimeout(() => {
+                            alert('Następna fiszka! (To jest prototyp - w rzeczywistej aplikacji załadowałaby się kolejna karta)');
+                            window.location.href = 'student-dashboard.html';
+                        }, 1500);
+                    } else {
+                        this.classList.remove('selected');
+                        this.classList.add('incorrect');
+                        // Show correct answer
+                        document.querySelector('[data-answer="correct"]').classList.add('correct');
+                        announceToScreenReader('Niepoprawna odpowiedź. Poprawna odpowiedź to: jabłko');
+                        
+                        // Load next card after delay
+                        setTimeout(() => {
+                            alert('Następna fiszka! (To jest prototyp)');
+                        }, 2500);
+                    }
+                }, 300);
+            });
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.code === 'Space' && !audioPlaying) {
+                e.preventDefault();
+                audioBtn.click();
+            } else if (e.code === 'Enter') {
+                const selected = document.querySelector('.mcq-option.selected');
+                if (selected) {
+                    selected.click();
+                }
+            } else if (e.ctrlKey && e.code === 'KeyZ') {
+                e.preventDefault();
+                alert('Funkcja cofnij (To jest prototyp)');
+            }
+        });
+
+        // Screen reader announcements
+        function announceToScreenReader(message) {
+            const liveRegion = document.getElementById('srLiveRegion') || createLiveRegion();
+            liveRegion.textContent = message;
+        }
+
+        function createLiveRegion() {
+            const region = document.createElement('div');
+            region.id = 'srLiveRegion';
+            region.setAttribute('role', 'status');
+            region.setAttribute('aria-live', 'assertive');
+            region.setAttribute('aria-atomic', 'true');
+            region.style.position = 'absolute';
+            region.style.left = '-10000px';
+            region.style.width = '1px';
+            region.style.height = '1px';
+            region.style.overflow = 'hidden';
+            document.body.appendChild(region);
+            return region;
+        }
+
+        // Back link
+        document.querySelector('.btn--secondary[aria-label="Zakończ sesję"]').addEventListener('click', function() {
+            if (confirm('Czy na pewno chcesz zakończyć sesję?')) {
+                window.location.href = 'student-dashboard.html';
+            }
+        });
+    </script>
+</body>
+</html>

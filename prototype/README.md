@@ -14,26 +14,41 @@ This prototype serves as:
 
 ```
 prototype/
-├── README.md                 # This file
-├── index.html               # Main prototype entry point
+├── README.md                     # This file
+├── index.html                   # Main prototype entry point
 ├── assets/
-│   ├── styles/
-│   │   ├── tokens.css       # Design tokens as CSS custom properties
-│   │   ├── components.css   # Component styles
-│   │   └── screens.css      # Screen-specific styles
-│   ├── icons/               # SVG icons
-│   └── mock-data.js         # Mock data for testing
-├── components/
-│   ├── button.html          # Button component examples
-│   ├── audio-control.html   # Audio control with states
-│   ├── modal.html           # Modal examples
-│   └── timer.html           # Timer component
-└── screens/
-    ├── login.html           # Login screen
-    ├── session.html         # Session UI
-    ├── dashboard.html       # Student dashboard
-    └── admin-import.html    # Admin import screen
+│   └── styles/
+│       ├── tokens.css           # Design tokens as CSS custom properties
+│       ├── components.css       # Component styles
+│       └── screens.css          # Screen-specific styles
+└── screens/                     # All screen prototypes (9 screens)
+    ├── login.html               # Login screen (01)
+    ├── student-dashboard.html   # Student Dashboard (02)
+    ├── session.html             # Session/Learning UI (03)
+    ├── lessons.html             # Lessons Management (04)
+    ├── admin-dashboard.html     # Admin Dashboard (05)
+    ├── admin-import.html        # Admin Import (06)
+    ├── admin-users.html         # Admin Users Management (07)
+    ├── admin-exports.html       # Admin Exports (08)
+    └── settings.html            # Settings & TTS Config (09)
 ```
+
+## Available Screens
+
+All screens are fully navigable, clickable prototypes based on design specifications in `../design/` directory:
+
+### Student Screens
+1. **Login** (`screens/login.html`) - Authentication with email/password
+2. **Student Dashboard** (`screens/student-dashboard.html`) - Main dashboard with stats and recent sessions
+3. **Session** (`screens/session.html`) - Interactive learning session with flashcards
+4. **Lessons** (`screens/lessons.html`) - Browse and manage lesson collections
+5. **Settings** (`screens/settings.html`) - User profile, TTS, and learning preferences
+
+### Admin Screens
+6. **Admin Dashboard** (`screens/admin-dashboard.html`) - System overview and quick actions
+7. **Admin Import** (`screens/admin-import.html`) - Import vocabulary data (CSV/JSON/Excel)
+8. **Admin Users** (`screens/admin-users.html`) - User management table
+9. **Admin Exports** (`screens/admin-exports.html`) - Export system data
 
 ## Running Locally
 
