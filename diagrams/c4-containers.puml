@@ -1,0 +1,32 @@
+@startuml C4_Containers
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(admin, "Parent / Admin (P-002)", "Manages users, imports, exports")
+Person(student, "Laura (P-001)", "Learner who runs sessions and quizzes")
+
+System_Boundary(system, "English Flashcards (MVP)") {
+  Container(web_client, "Web Client (SPA)", "Static SPA (HTML/JS)", "Handles UI: login, dashboard, session, admin pages")
+  Container(api, "App Backend (API)", "FastAPI (Python)", "REST API: auth, import, sessions, SR engine, TTS adapter, admin routes")
+  Container(tts_local, "TTS Engine (Coqui / espeak)", "Coqui/espeak container", "Generates audio; optional; exposes HTTP endpoint")
+  Container(audio_cache, "Audio Cache (host volume)", "File storage", "Stores generated audio files; retention 90 days")
+  Container(db, "SQLite (host volume)", "SQLite file", "Stores users, lessons, SR history, import audit")
+  Container(worker, "Background Worker (optional)", "Lightweight worker", "Handles background tasks: TTS generation, import commit, export generation")
+  Container(proxy, "Reverse Proxy (optional)", "nginx/caddy", "Handles TLS, trusted proxy headers, X-Forwarded-For")
+}
+
+Rel(student, web_client, "Uses")
+Rel(admin, web_client, "Uses (admin UI)")
+Rel(web_client, api, "REST API (HTTPS)")
+Rel(api, db, "Reads/Writes", "SQL")
+Rel(api, audio_cache, "Reads/Writes audio files", "file I/O")
+Rel(api, tts_local, "HTTP call to generate audio")
+Rel(worker, tts_local, "HTTP call (async) to generate audio")
+Rel(proxy, api, "Forwards requests / sets X-Forwarded-For")
+Rel(proxy, web_client, "Serves static assets / TLS")
+
+Boundary_Boundary(proxmox, "Ops") {
+  System_Ext(proxmox, "Proxmox (Backup)", "Operacyjny backup host volume (DB + audio cache)")
+}
+Rel(proxmox, db, "Backs up host volume (operational)")
+
+@enduml

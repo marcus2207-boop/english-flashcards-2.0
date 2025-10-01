@@ -1,0 +1,33 @@
+story_id,endpoint,table,column,notes
+ST-001,/api/auth/login,users,email,login identifier
+ST-001,/api/auth/login,users,password_hash,Argon2id hash
+ST-002,/api/admin/users,users,email,unique email for user
+ST-002,/api/admin/users,users,nickname,user display name
+ST-002,/api/admin/users,users,role,rbac role
+ST-003,/api/imports,imports,filename,uploaded file name
+ST-003,/api/imports,imports,total_rows,total rows in import
+ST-003,/api/imports,imports,error_rows,error rows count
+ST-003,/api/imports/{importId}/preview,import_rows,english,import row english
+ST-003,/api/imports/{importId}/preview,import_rows,polish,import row polish
+ST-003,/api/imports/{importId}/preview,import_rows,valid,row validation flag
+ST-003,/api/imports/{importId}/commit,lesson_items,english,final stored english
+ST-003,/api/imports/{importId}/commit,lesson_items,polish,final stored polish
+ST-004,/api/users/{userId}/lessons,lessons,id,lesson id
+ST-004,/api/users/{userId}/lessons,lessons,title,lesson title
+ST-005a,/api/sessions/{sessionId}/answer,session_answers,session_id,FK to sessions
+ST-005a,/api/sessions/{sessionId}/answer,session_answers,question_id,question identifier
+ST-005a,/api/sessions/{sessionId}/answer,session_answers,user_answer,student answer text
+ST-005a,/api/sessions/{sessionId}/progress,sessions,score,session score
+ST-005a,/api/tts/generate,audio_cache,hash,cache key
+ST-005a,/api/tts/generate,audio_cache,path,file path
+ST-006,/api/sessions/{sessionId}/answer,spaced_repetition,state,current SR state
+ST-006,/api/sessions/{sessionId}/answer,spaced_repetition,next_review_at,next scheduled review
+ST-007,/api/sessions/{sessionId}/answer,session_answers,is_correct,answer correctness
+ST-008,/api/users/{userId}/lessons,lessons,id,lesson id for dashboard
+ST-009,/api/admin/exports,exports,requested_by,admin user id
+ST-009,/api/admin/exports,exports,status,export status
+ST-010,/api/users/{userId}/lessons,lessons,owner_user_id,owner user id
+ST-011,/api/users/{userId},users,deleted_at,soft-delete timestamp
+ST-011,/api/users/{userId},audit_logs,action,action detail for deletion
+ST-012,/api/tts/generate,audio_cache,accent,requested accent
+ST-012,/api/tts/generate,audio_cache,engine,engine used (coqui/espeak/external)

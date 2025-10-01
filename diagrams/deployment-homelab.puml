@@ -1,0 +1,45 @@
+@startuml Deployment_Homelab
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Deployment.puml
+
+Deployment_Node(proxmox, "Proxmox Host (homelab)", "VM host for containers and backups") {
+  Deployment_Node(dockerhost, "Docker Host (VM)", "Docker Engine & Docker Compose") {
+    Container_Instance(ef_proxy, "ef_proxy", "nginx", "Reverse proxy (TLS, X-Forwarded-For)", "Ports: 80/443")
+    Container_Instance(ef_backend, "ef_backend", "FastAPI", "Backend API (uvicorn)", "Port: 8000")
+    Container_Instance(ef_frontend, "ef_frontend", "nginx", "Serves SPA", "Port: 3000")
+    Container_Instance(ef_tts, "ef_tts", "Coqui/espeak", "Local TTS engine (optional)", "")
+    Container_Instance(ef_db, "ef_db", "SQLite (host volume)", "DB file on host volume (/data/db.sqlite)", "")
+    Container_Instance(ef_worker, "ef_worker", "Worker", "Background tasks (optional)", "")
+    Container_Instance(prometheus, "prometheus", "Prometheus", "Scrapes /metrics endpoints", "")
+    Container_Instance(grafana, "grafana", "Grafana", "Dashboards for metrics", "")
+  }
+  Deployment_Node(proxmox_ops, "Proxmox (Ops)", "Performs VM snapshots & backups") {
+    Rel(proxmox_ops, dockerhost, "Backups host volumes (db + audio-cache)")
+  }
+}
+
+Rel_L(ef_proxy, ef_backend, "Forwards requests (HTTP) + sets X-Forwarded-For")
+Rel_L(ef_frontend, ef_proxy, "Served via proxy (optional TLS)")
+Rel_L(ef_backend, ef_db, "Reads/Writes DB file on host volume")
+Rel_L(ef_backend, ef_tts, "Calls TTS via HTTP for generation")
+Rel_L(ef_worker, ef_tts, "Async audio generation / batch work")
+Rel_L(prometheus, ef_backend, "Scrapes /metrics")
+Rel_L(grafana, prometheus, "Datasource (Prometheus)")
+Rel_L(ef_proxy, prometheus, "Optional: proxy metrics monitored")
+Rel_L(proxmox_ops, ef_db, "Snapshot / backup / retention 30d")
+
+' Notes
+note right of ef_db
+  DB persistence:
+  - SQLite file stored on host volume: ./data/db.sqlite
+  - Backups performed by Proxmox snapshots / cron exporters
+  - Retention: 30 days (ops)
+end note
+
+note left of ef_tts
+  TTS:
+  - Coqui preferred (higher quality)
+  - espeak-ng fallback
+  - Audio cache stored at ./data/audio-cache (retention 90 days)
+end note
+
+@enduml

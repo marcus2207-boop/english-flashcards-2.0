@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install backend lint deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install ruff
+      - name: Run backend linter
+        run: ruff check .
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f backend/requirements-dev.txt ]; then pip install -r backend/requirements-dev.txt; fi
+      - name: Run tests
+        run: |
+          pytest -q
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build backend image
+        run: docker build -f docker/backend/Dockerfile -t ef_backend:ci .
+      - name: Build frontend image
+        run: docker build -f docker/frontend/Dockerfile -t ef_frontend:ci .
+
+  smoke-tests:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Docker Compose
+        uses: docker/setup-buildx-action@v2
+      - name: Start services
+        run: |
+          docker compose -f docker-compose.yml up --build -d
+      - name: Wait for API
+        run: |
+          for i in `seq 1 30`; do
+            if curl -sSf http://localhost:8000/health >/dev/null 2>&1; then
+              echo "API is up"
+              break
+            fi
+            echo "Waiting for API..."
+            sleep 2
+          done
+      - name: Run import E2E smoke-test
+        run: |
+          chmod +x smoke-tests/import-e2e.sh || true
+          BASE_URL=http://localhost:8000 smoke-tests/import-e2e.sh tests/data/import_200.csv || true
+      - name: Run TTS latency smoke-test
+        run: |
+          chmod +x smoke-tests/tts-latency.sh || true
+          BASE_URL=http://localhost:8000 smoke-tests/tts-latency.sh "example" "coqui" "uk" || true
+      - name: Run dashboard load (k6) if available
+        if: runner.os == 'Linux'
+        run: |
+          if command -v k6 >/dev/null 2>&1; then
+            k6 run --vus 5 --duration 30s smoke-tests/dashboard-load.js || true
+          else
+            echo "k6 not available in runner; skipping dashboard load"
+          fi
+      - name: Tear down
+        if: always()
+        run: docker compose -f docker-compose.yml down -v

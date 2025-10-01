@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: docker/backend/Dockerfile
+    container_name: ef_backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./data:/data
+    depends_on:
+      - tts
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/frontend/Dockerfile
+    container_name: ef_frontend
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+  tts:
+    image: coqui/tts:latest
+    container_name: ef_tts
+    restart: unless-stopped
+    environment:
+      - COQUI_MODEL=tts_model
+    volumes:
+      - ./data/audio-cache:/data/audio-cache
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1g
+
+  proxy:
+    image: nginx:stable-alpine
+    container_name: ef_proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./ops/nginx/conf.d:/etc/nginx/conf.d:ro
+    depends_on:
+      - backend
+      - frontend
+    restart: unless-stopped
+
+volumes:
+  data:
+    driver: local

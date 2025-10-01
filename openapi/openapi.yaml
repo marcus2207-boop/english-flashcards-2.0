@@ -1,0 +1,234 @@
+openapi: 3.0.3
+info:
+  title: English Flashcards API (MVP) - OpenAPI Skeleton
+  version: "0.1.0"
+  description: |
+    Skeleton OpenAPI 3.0 specification for the MVP.
+    Endpoints are annotated with story IDs (ST-XXX) in operation descriptions to maintain RTM traceability.
+servers:
+  - url: http://localhost:8000
+    description: Local dev
+
+paths:
+  /api/auth/login:
+    post:
+      summary: Authentication (email + password) — ST-001
+      description: |
+        Authenticate user with email and password. Uses Argon2id for password verification.
+        Story: ST-001
+      tags:
+        - auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required: [email, password]
+      responses:
+        "200":
+          description: Authenticated — returns session cookie / user info
+        "400":
+          description: Validation error
+        "401":
+          description: Unauthorized
+
+  /api/users/{userId}/lessons:
+    get:
+      summary: Get lessons for user — ST-008 / ST-004
+      description: |
+        Returns lesson list and basic stats for dashboard.
+        Stories: ST-008 (dashboard), ST-004 (lesson CRUD)
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of lessons
+
+  /api/imports:
+    post:
+      summary: Upload import file (CSV/JSON) — ST-003
+      description: |
+        Uploads a file for import processing. Returns importId for preview.
+        Story: ST-003
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "202":
+          description: Accepted (import job created) — returns { importId }
+  /api/imports/{importId}/preview:
+    get:
+      summary: Get import preview — ST-003
+      description: "Per-row validation and preview for an import job."
+      parameters:
+        - name: importId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Preview data with per-row validation
+
+  /api/imports/{importId}/commit:
+    post:
+      summary: Commit import — ST-003
+      description: "Commit previously previewed import (transactional rules apply)."
+      parameters:
+        - name: importId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Import committed
+
+  /api/sessions/{sessionId}/answer:
+    post:
+      summary: Submit answer for session question — ST-005a / ST-006 / ST-007
+      description: >
+        Submit user's answer for a question in a session. Updates spaced-repetition state.
+        Stories: ST-005a (flashcards), ST-006 (SR), ST-007 (quiz)
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                questionId:
+                  type: string
+                answer:
+                  type: string
+      responses:
+        "200":
+          description: Answer accepted
+
+  /api/sessions/{sessionId}/progress:
+    get:
+      summary: Get session progress — ST-005a
+      description: "Fetch session progress/stats."
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Session progress
+
+  /api/tts/generate:
+    post:
+      summary: Generate TTS audio — ST-005a / ST-005b / ST-012
+      description: |
+        Request generation of audio for a word. Backend will check cache, attempt local Coqui, fallback to espeak or external provider.
+        Stories: ST-005a, ST-005b, ST-012
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                word:
+                  type: string
+                engine:
+                  type: string
+                  enum: [coqui, espeak, external]
+                accent:
+                  type: string
+      responses:
+        "202":
+          description: Accepted (job queued) — returns { url, status }
+        "200":
+          description: Immediate URL returned (cached)
+
+  /api/tts/cache/{hash}:
+    get:
+      summary: Get cached audio by hash — ST-005a
+      description: "Retrieve cached audio file metadata or URL."
+      parameters:
+        - name: hash
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Cached audio metadata / URL
+
+  /api/admin/exports:
+    get:
+      summary: List exports / Trigger export — ST-009
+      description: "Admin exports (CSV/PDF). Access restricted to ADMIN_CIDR (app-level check)."
+      parameters:
+        - name: period
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of exports or exportId
+
+  /api/admin/exports/{exportId}/download:
+    get:
+      summary: Download export file — ST-009
+      description: "Download generated export."
+      parameters:
+        - name: exportId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: File stream
+
+  /api/users/{userId}:
+    delete:
+      summary: Admin-initiated data deletion (GDPR) — ST-011
+      description: "Admin endpoint to delete user data and log audit entry. Only admin from allowed CIDR."
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deletion confirmed
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: session
+
+security:
+  - cookieAuth: []

@@ -1,0 +1,18 @@
+@startuml C4_System_Context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+Person(admin, "Parent / Admin (P-002)", "Manages users, imports, exports, monitoring")
+Person(student, "Laura (P-001)", "Learner who runs sessions and quizzes")
+
+System_Boundary(system, "English Flashcards (MVP)") {
+  System(webapp, "Web Application (SPA + API)", "Provides UI and backend API for sessions, imports, TTS, dashboards")
+  System_Ext(tts_provider, "External TTS Provider", "Optional external TTS API (used only if configured)")
+  System_Ext(proxmox, "Proxmox (Ops)", "Performs operational backups of host volumes")
+}
+
+Rel(admin, webapp, "Uses (LAN only / admin routes)")
+Rel(student, webapp, "Uses (session, lessons, TTS playback)")
+Rel(webapp, tts_provider, "Calls for high-quality audio (optional)")
+Rel(proxmox, system, "Backs up host volume (DB + audio cache)")
+
+@enduml

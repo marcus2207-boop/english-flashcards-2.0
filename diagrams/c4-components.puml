@@ -1,0 +1,40 @@
+@startuml C4_Components
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Person(admin, "Parent / Admin (P-002)")
+Person(student, "Laura (P-001)")
+
+System_Boundary(system, "English Flashcards (MVP)") {
+  Container(api, "App Backend (API)", "FastAPI (Python)", "REST API: auth, import, sessions, SR engine, TTS adapter, admin routes")
+  
+  Container_Boundary(api, "Backend Modules") {
+    Component(auth, "Auth Module", "Handles login, session cookies, Argon2id hashing", "ST-001")
+    Component(user_mgmt, "User Management", "Create/update users, admin overrides, audit logging", "ST-002, ST-011")
+    Component(importer, "Import Service", "CSV/JSON parsing, per-row validation, preview/commit transactional logic", "ST-003")
+    Component(session_engine, "Session Service", "Session lifecycle, quiz engine, autosave", "ST-005a, ST-007")
+    Component(sr_engine, "Spaced Repetition Engine", "SR state machine and scheduling", "ST-006")
+    Component(tts_adapter, "TTS Adapter", "Adapter pattern to Coqui / espeak / external + cache coordination", "ST-005b, ST-012")
+    Component(audio_cache_comp, "Audio Cache Manager", "Manages file store metadata and retention (90d)", "ST-005a")
+    Component(exporter, "Export Service", "Generates CSV/PDF exports, tracked jobs", "ST-009")
+    Component(audit, "Audit Logger", "Records admin actions & exports", "ST-002, ST-009")
+  }
+
+  Container(tts_local, "TTS Engine (Coqui / espeak)", "Coqui/espeak container", "Generates audio; optional; exposes HTTP endpoint")
+  Container(db, "SQLite (host volume)", "SQLite file", "Stores users, lessons, SR history, import audit")
+  Container(worker, "Background Worker (optional)", "Lightweight worker", "Handles background jobs: TTS generation, import commit, export generation")
+}
+
+Rel(student, api, "Uses (HTTP/HTTPS) - session, lessons, TTS playback")
+Rel(admin, api, "Uses (LAN only) - import, exports, users")
+Rel(api, db, "Reads/Writes", "SQL")
+Rel(importer, importer, "Processes and writes to", "imports / import_rows / lesson_items")
+Rel(importer, db, "Writes import results", "SQL")
+Rel(session_engine, db, "Reads/Writes sessions & session_answers", "SQL")
+Rel(sr_engine, db, "Reads/Writes spaced_repetition", "SQL")
+Rel(tts_adapter, tts_local, "HTTP call to generate audio")
+Rel(tts_adapter, audio_cache_comp, "Lookup & store metadata", "SQL + file path")
+Rel(worker, tts_local, "Async audio generation (HTTP)")
+Rel(exporter, db, "Writes exports metadata", "SQL")
+Rel(audit, db, "Writes audit logs", "SQL")
+
+@enduml
